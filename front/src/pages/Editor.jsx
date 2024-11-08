@@ -1,3 +1,3 @@
 export default function Editor() {
-    return <>Penis</>
+    return <div className='text-blue-800'>Penis</div>
 }
