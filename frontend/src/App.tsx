@@ -10,7 +10,7 @@ function App() {
         <h1 className="text-3xl font-bold underline my-2">
           Hassos Hustler present
         </h1>
-        <SplatScene />
+        {/* <SplatScene /> */}
       </div>
       <Footer />
     </div>
