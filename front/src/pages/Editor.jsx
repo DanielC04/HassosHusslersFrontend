@@ -276,8 +276,8 @@ export default function Editor({ setPage, floors, setFloors }) {
 
     return <>
         <Popup hidden={popupState[0]} text={popupState[1]} hideSelf={popupState[2]} continueCallback={popupState[3]}/>
-        <a className="absolute top-0 left-0" href="https://www.junction2024.com/">
-            <img src={monoplanLogo} className="h-28"/>
+        <a className="absolute top-0 left-0">
+            <img src={monoplanLogo} className="h-24"/>
         </a>
         <div className="flex">
             <div className="flex h-screen">
