@@ -2,14 +2,21 @@ import { useEffect, useState, useRef } from 'react'
 import FloorTest from '../assets/floortest.svg'
 import EditorCanvas from './EditorCanvas'
 import Wall from '../Wall'
-import { dist } from '../util'
+import { dist, clamp, distanceToLineSegment } from '../util'
+import BeatLoader from 'react-spinners/BeatLoader'
+
+const WIDTH = 900
+const HEIGHT = 600
 
 export default function LineEditor({ walls, setWalls, planSvg }) {
     // const [walls, setWalls] = useState([])
     const [isDragging, setIsDragging] = useState(false)
     const [selectedKey, setSelectedKey] = useState()
+    const [hasLoaded, setHasLoaded] = useState(false)
+    const [zoom, setZoom] = useState(1.0)
+    const [debugPoint, setDebugPoint] = useState()
     const imgRef = useRef()
-    console.log('lineedit', planSvg)
+    const wrapperRef = useRef()
 
     function renderSvgToImg(svgFile, imgElement) {
         if (!(svgFile instanceof Blob)) {
@@ -32,9 +39,9 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
 
     const getCoords = (e) => {
         // https://stackoverflow.com/a/42111623/10666216
-        let rect = e.target.getBoundingClientRect();
-        let x = e.clientX - rect.left; //x position within the element.
-        let y = e.clientY - rect.top;  //y position within the element.
+        let rect = wrapperRef.current.getBoundingClientRect();
+        let x = (e.clientX - rect.left) / zoom; //x position within the element.
+        let y = (e.clientY - rect.top) / zoom;  //y position within the element.
         return [x,y]
     }
 
@@ -42,20 +49,30 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
         const lastWall = walls[walls.length-1]
         if (lastWall.length() < 10) {
             // click
-            setWalls(walls.filter(wall => wall.key != lastWall.key))
+            const newWalls = walls.filter(wall => wall.key != lastWall.key)
+            setWalls(newWalls)
             const mouse = getCoords(e)
-            let minDist = 0
-            let closestKey = null
-            walls.forEach(wall => {
-                if (wall.key != lastWall.key) {
-                    const mouseDist = dist(mouse, wall.midPoint())
-                    if (mouseDist < minDist || closestKey==null) {
-                        closestKey = wall.key
-                        minDist = mouseDist
-                    }
+            // let minDist = 0
+            // let closestKey = null
+            // walls.forEach(wall => {
+            //     if (wall.key != lastWall.key) {
+            //         const mouseDist = dist(mouse, wall.midPoint())
+            //         if (mouseDist < minDist || closestKey==null) {
+            //             closestKey = wall.key
+            //             minDist = mouseDist
+            //         }
+            //     }
+            // })
+            // setSelectedKey(closestKey)
+            let found = false
+            for (const wall of newWalls) {
+                if (distanceToLineSegment(mouse, wall.start, wall.end) < 20) {
+                    setSelectedKey(wall.key)
+                    found = true
+                    break
                 }
-            })
-            setSelectedKey(closestKey)
+            }
+            if (!found) setSelectedKey()
         }
         setIsDragging(false)
     }
@@ -90,32 +107,51 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
         setSelectedKey()
     }
 
+    const handleScroll = (e) => {
+        const newZoom = clamp(zoom-(e.deltaY / 1000), 0.5, 2.0)
+        setZoom(newZoom)
+    }
+
     useEffect(() => {
         renderSvgToImg(planSvg, imgRef.current)
     }, [planSvg])
 
     return (
         <div 
-            onMouseDown={handleMouseDown} 
-            onMouseUp={handleMouseUp} 
-            onMouseMove={handleMouseMove} 
-            className="h-[500px] w-[500px] flex relative"
+            className="flex relative overflow-clip"
+            style={{ width: WIDTH, height: HEIGHT }}
+            onWheel={handleScroll}
         >
-            <EditorCanvas w={500} h={500} walls={walls} selectedKey={selectedKey} />
-            <img className="flex-1" ref={imgRef} />
-            { selectedWall() &&
-                <button
-                    style={{ 
-                        left: selectedWall().midPoint()[0],
-                        top: selectedWall().midPoint()[1],
-                    }}
-                    onMouseUp={deleteSelected} 
-                    onMouseDown={e => e.stopPropagation()}
-                    className='absolute bg-red-600 text-white p-1 rounded'
-                >
-                    Delete
-                </button>
+            { !hasLoaded &&
+                <BeatLoader className='absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]' size={20} />
             }
+            <div 
+                ref={wrapperRef} 
+                style={{ width: WIDTH, height: HEIGHT, transform: `scale(${zoom})`}} 
+                onMouseDown={handleMouseDown} 
+                onMouseUp={handleMouseUp} 
+                onMouseMove={handleMouseMove}
+            >
+                <EditorCanvas w={WIDTH} h={HEIGHT} walls={walls} selectedKey={selectedKey} debugPoint={debugPoint}/>
+                <img 
+                    className={`absolute max-h-full max-w-full top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] ${hasLoaded ? 'visible' : 'invisible'} pointer-events-none`} 
+                    ref={imgRef} 
+                    onLoad={()=>setHasLoaded(true)}
+                />
+                { selectedWall() &&
+                    <button
+                        style={{ 
+                            left: selectedWall().midPoint()[0] + 10,
+                            top: selectedWall().midPoint()[1] + 10,
+                        }}
+                        onMouseUp={deleteSelected} 
+                        onMouseDown={e => e.stopPropagation()}
+                        className='absolute bg-red-600 text-white p-1 rounded z-20'
+                    >
+                        Delete
+                    </button>
+                }
+            </div>
         </div>
     )
 }
