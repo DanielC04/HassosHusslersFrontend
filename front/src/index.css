@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.floorbtn:hover span {
+    display: none;
+}
+
+.floorbtn:hover::before {
+    content: "✕";
+}
+
+.floorbtn:hover {
+    background-color: #c82104;
+}
+
+.floorchooser {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    transform: translate(-50%);
+}
+
+input[type="file"] {
+    display: none;
+}
