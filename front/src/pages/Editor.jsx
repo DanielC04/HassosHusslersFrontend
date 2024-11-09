@@ -81,7 +81,7 @@ export default function Editor({ setPage, floors, setFloors }) {
             }
 
             uploadDict.current[selectedFloor] = index;
-            setWallsInFloor(selectedFloor, [selectedFloor]);
+            setWallsInFloor(selectedFloor, []);
 
             setFloorArray(floorArray);
 
