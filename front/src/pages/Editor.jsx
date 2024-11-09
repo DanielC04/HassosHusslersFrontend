@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import LineEditor from '../components/LineEditor';
 import LeTriangle from '../assets/triangle.svg';
 import uploadLogo from '../assets/uploadlogo.svg';
+import Floor from '../Floor';
 
 function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtnHavingness }) {
     /*bg-slate-400 hover:bg-slate-500
@@ -212,7 +213,10 @@ export default function Editor({ setPage, floors, setFloors }) {
     }
         
     function setWallsInFloor(floor, walls) {
-        let newFloors = {...floors, [floor]: walls};
+        let modifiedFloor = floors[floor]
+        if (modifiedFloor) modifiedFloor.walls = walls
+        else modifiedFloor = new Floor()
+        let newFloors = {...floors, [floor]: modifiedFloor};
         return setFloors(newFloors);
     }
 
@@ -264,7 +268,8 @@ export default function Editor({ setPage, floors, setFloors }) {
                         <div className="flex flex-row justify-center items-center">
                             <HeightInput/>
                         </div>
-                        <LineEditor walls={floors[selectedFloor]} setWalls={(w) => setWallsInFloor(selectedFloor, w)} className="my-auto" />
+                        <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]} className="my-auto" />=======
+
                     </div>
                 </div>
             }
