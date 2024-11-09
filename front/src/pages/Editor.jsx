@@ -57,16 +57,20 @@ function Popup({ hidden = true, text, hideSelf, continueCallback }) {
         </div>;
 }
 
-function HeightInput() {
-    const [value, setValue] = useState("3");
+function HeightInput({ height, setHeight }) {
+    console.log("start val", height);
+    //const [value, setValue] = useState(height.toString());
+
+    //console.log(typeof(value), value);
 
     return <div className="bg-slate-200 px-6 py-4 my-2 rounded-md">
         <label className="mr-4 font-semibold" htmlFor="floorheight">Height:</label>
-        <input className="w-20 mx-2 text-center" id="floorheight" type="text" value={value} onChange={e => {
+        <input className="w-20 mx-2 text-center" id="floorheight" type="text" value={height} onChange={e => {
                 console.log(e.target.value, !!e.target.value);
                 let newVal = e.target.value;
                 if (!newVal) {
-                    setValue("0");
+                    setHeight("0");
+                    //setValue("0");
                     return;
                 }
                 newVal = newVal.replace(",", ".");
@@ -75,8 +79,12 @@ function HeightInput() {
                     console.log(/^0+$/.test(substr));
                     if (newVal[0] == '.') newVal = '0'+newVal;
                     else if (/^0+$/.test(substr)) newVal = newVal.slice(newVal.indexOf(".")-1);
-                    else newVal = newVal.replace(/^0+/, '');
-                    setValue(newVal);
+                    else {
+                        newVal = newVal.replace(/^0+/, '');
+                        if (newVal == "") newVal = "0";
+                    }
+                    setHeight(newVal);
+                    //setValue(newVal);
                 }
                     
             }}>
@@ -88,7 +96,7 @@ function HeightInput() {
 export default function Editor({ setPage, floors, setFloors }) {
     const uploadedFiles = useRef([]);
     const uploadDict = useRef({0: null});
-    const heightDict = useRef({0: null});
+    const heightDict = useRef({0: "3"});
 
     const [floorArray, setFloorArray] = useState([0]);
     const [selectedFloor, setSelectedFloor] = useState(0);
@@ -98,7 +106,11 @@ export default function Editor({ setPage, floors, setFloors }) {
     const [forceUpdate, setForceUpdate] = useState(false);
 
     function setCurrentHeight(height) {
-        heightDict.current[selectedFloor] = parseFloat(height);
+        heightDict.current[selectedFloor] = height;
+        let floatHeight = height.slice(-1) == '.' ? parseFloat(height.slice(0, -1)) : parseFloat(height);
+        let newFloors = {...floors};
+        newFloors[selectedFloor].height = floatHeight;
+        setFloors(newFloors);
     }
     
     function handleFileChange(e) {
@@ -163,17 +175,21 @@ export default function Editor({ setPage, floors, setFloors }) {
             if (value >= 0) {
                 for (let i = value+1; i <= floorArray[0]; i++) {
                     uploadDict.current[i-1] = uploadDict.current[i];
+                    heightDict.current[i-1] = heightDict.current[i];
                     newFloors[i-1] = newFloors[i];
                 }
                 delete uploadDict.current[floorArray[0]];
+                delete heightDict.current[floorArray[0]];
                 delete newFloors[floorArray[0]];
                 setSelectedFloor(selectedFloor - 1);
             } else {
                 for (let i = floorArray[floorArray.length - 1]; i <= value - 1; i++) {
                     uploadDict.current[i+1] = uploadDict.current[i];
+                    heightDict.current[i+1] = heightDict.current[i];
                     newFloors[i+1] = newFloors[i];
                 }
                 delete uploadDict.current[floorArray[floorArray.length - 1]];
+                delete heightDict.current[floorArray[floorArray.length - 1]];
                 delete newFloors[floorArray[floorArray.length - 1]];
                 setSelectedFloor(selectedFloor + 1);
             }
@@ -194,6 +210,7 @@ export default function Editor({ setPage, floors, setFloors }) {
         setFloorArray(newFloorArray);
         setWallsInFloor(newFloorNum, null);
         uploadDict.current[newFloorNum] = null;
+        heightDict.current[newFloorNum] = "3";
         setSelectedFloor(newFloorNum);
     }
 
@@ -203,12 +220,14 @@ export default function Editor({ setPage, floors, setFloors }) {
         setFloorArray(newFloorArray);
         setWallsInFloor(newFloorNum, null);
         uploadDict.current[newFloorNum] = null;
+        heightDict.current[newFloorNum] = "3";
         setSelectedFloor(newFloorNum);
     }
 
     function deleteCurrentFloorplan() {
         uploadedFiles.current[uploadDict.current[selectedFloor]] = null;
         uploadDict.current[selectedFloor] = null;
+        heightDict.current[selectedFloor] = "3";
         setWallsInFloor(selectedFloor, null);
     }
         
@@ -266,9 +285,9 @@ export default function Editor({ setPage, floors, setFloors }) {
                     </div>
                     <div className="flex flex-col justify-center h-full items-center">
                         <div className="flex flex-row justify-center items-center">
-                            <HeightInput/>
+                            <HeightInput height={heightDict.current[selectedFloor]} setHeight={setCurrentHeight}/>
                         </div>
-                        <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]} className="my-auto" />=======
+                        <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]} className="my-auto" />
 
                     </div>
                 </div>
