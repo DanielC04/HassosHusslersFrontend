@@ -51,7 +51,7 @@ function FloorAddButton({ value, handleBtnPress }) {
         </>;
 }
 
-export default function Editor() {
+export default function Editor({ setPage }) {
     const uploadedFiles = useRef([]);
     const uploadDict = useRef({0: null});
 
@@ -134,6 +134,7 @@ export default function Editor() {
                 </div>
             </div>
             <LineEditor />
+            <button onClick={() => setPage('viewer')}>View 3D Model</button>
             {/* <UploadConglomerate handleFileChange={handleFileChange}/> */}
         </div>;
 }
