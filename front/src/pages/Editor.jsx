@@ -63,7 +63,7 @@ export default function Editor({ setPage, floors, setFloors }) {
         if (e.target.files) {
             let receivedFile = e.target.files[0];
 
-            if (receivedFile.name.slice(-4).toLowerCase() != ".pdf") {
+            if (receivedFile.name.slice(-4).toLowerCase() != ".svg") {
                 return;
             }
 
@@ -82,12 +82,18 @@ export default function Editor({ setPage, floors, setFloors }) {
 
             uploadDict.current[selectedFloor] = index;
 
+            setFloorArray(floorArray);
+
             console.log(receivedFile);
         }
     }
 
     function handleFloorPress(value) {
         if (value == selectedFloor) {
+            if (!hasFloorbtn) {
+                setHasFloorbtn(true);
+                return;
+            }
             if (floorArray.length <= 1 || value == 0) return;
 
             uploadedFiles.current[uploadDict.current[value]] = null;
@@ -107,6 +113,8 @@ export default function Editor({ setPage, floors, setFloors }) {
             }
 
             setFloorArray(value >= 0 ? floorArray.slice(1) : floorArray.slice(0, -1));
+
+            console.log(uploadDict.current);
         } else {
             setHasFloorbtn(false);
             setSelectedFloor(value);
@@ -139,8 +147,13 @@ export default function Editor({ setPage, floors, setFloors }) {
                     <FloorAddButton value="+" handleBtnPress={addFloorBelow}/>
                 </div>
             </div>
-            <LineEditor walls={ floors[selectedFloor] } setWalls={(walls) => setWalls(selectedFloor, walls)}/>
-            <button onClick={() => setPage('viewer')}>View 3D Model</button>
-            {/* <UploadConglomerate handleFileChange={handleFileChange}/> */}
+            {!uploadedFiles.current[uploadDict.current[selectedFloor]] ?
+                <UploadConglomerate handleFileChange={handleFileChange}/>
+                :
+                <>
+                <LineEditor />
+                <button onClick={() => setPage('viewer')}>View 3D Model</button>
+                </>
+            }
         </div>;
 }
