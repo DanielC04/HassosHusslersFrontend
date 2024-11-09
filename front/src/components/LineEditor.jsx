@@ -5,7 +5,9 @@ import Wall from '../Wall'
 import { dist } from '../util'
 
 export default function LineEditor({ walls, setWalls }) {
+    return <div>adsf</div>
     // const [walls, setWalls] = useState([])
+    console.log('lineedit', walls)
     const [isDragging, setIsDragging] = useState(false)
     const [selectedKey, setSelectedKey] = useState()
 
