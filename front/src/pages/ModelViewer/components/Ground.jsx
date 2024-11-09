@@ -9,14 +9,12 @@ export function Ground(props) {
 
     useEffect(() => {
         if (ref.current) {
-            // ref.current.rotateX(Math.PI / 2); // Rotate 45 degrees on the X-axis
+            ref.current.rotateX(-Math.PI / 2); // Rotate 45 degrees on the X-axis
         }
     }, [])
 
     return (
-        <mesh
-        {...props}
-        ref={ref}>
+        <mesh {...props} ref={ref}>
             <planeGeometry args={[width, height]} position={[width/2., height/2., 0]} />
             <meshBasicMaterial color={'grey'} />
         </mesh>
