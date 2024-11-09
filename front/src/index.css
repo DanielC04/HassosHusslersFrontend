@@ -24,3 +24,7 @@
 input[type="file"] {
     display: none;
 }
+
+.flooraddbutton:hover {
+    filter: brightness(90%);
+}

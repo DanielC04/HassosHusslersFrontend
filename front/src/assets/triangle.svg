@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="800"
+   height="800"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <title
+     id="title1">triangle_fill</title>
+  <g
+     id="页面-1"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd">
+    <g
+       id="Shape"
+       transform="translate(-288,-48)">
+      <g
+         id="triangle_fill"
+         transform="translate(288,48)">
+        <path
+           d="M 24,0 V 24 H 0 V 0 Z m -11.40651,23.257841 -0.01155,0.0017 -0.07106,0.03553 -0.019,0.0037 v 0 l -0.01516,-0.0037 -0.07106,-0.03553 c -0.0098,-0.0031 -0.01861,-4.89e-4 -0.02351,0.0054 l -0.0041,0.01092 -0.01709,0.427279 0.005,0.02039 0.01101,0.01222 0.103573,0.07398 0.01487,0.0039 v 0 l 0.01177,-0.0039 0.103575,-0.07398 0.0126,-0.01604 v 0 l 0.0034,-0.01656 -0.01709,-0.427279 c -0.002,-0.01013 -0.0085,-0.01653 -0.01607,-0.01799 z m 0.264901,-0.112555 -0.01384,0.002 -0.184705,0.09235 -0.01,0.01024 v 0 l -0.0027,0.01121 0.0179,0.429528 0.0048,0.01278 v 0 l 0.0085,0.0071 0.200954,0.09275 c 0.01209,0.0037 0.02289,-2.52e-4 0.02849,-0.008 l 0.004,-0.01406 -0.03415,-0.614631 c -0.0024,-0.01194 -0.01027,-0.01953 -0.01929,-0.02125 z m -0.715344,0.002 c -0.0098,-0.0049 -0.02087,-0.002 -0.02741,0.0053 l -0.0057,0.01394 -0.03415,0.614631 c -6.39e-4,0.0115 0.007,0.0207 0.01688,0.0234 l 0.01561,-0.0013 0.200955,-0.09275 0.0094,-0.0081 v 0 l 0.0039,-0.0118 0.0179,-0.429528 -0.0032,-0.01259 v 0 l -0.0095,-0.0089 z"
+           id="MingCute"
+           fill-rule="nonzero" />
+        <path
+           d="m 10.7009,3.14771 c 0.5774,-1 2.0208,-1.00001 2.5981,-1e-5 l 8.634,14.9545 c 0.5773,1 -0.1443,2.25 -1.299,2.25 H 3.36601 c -1.1547,0 -1.87639,-1.25 -1.29904,-2.25 z"
+           id="路径"
+           fill="#09244B"
+           style="fill:#cbd5e1;fill-opacity:1" />
+      </g>
+    </g>
+  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12px;font-family:Sans;-inkscape-font-specification:'Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;inline-size:17.155;fill:#000000;fill-opacity:1;stroke:#ffffff;stroke-width:0.03;stroke-opacity:1"
+     x="-2.1176469"
+     y="12.148606"
+     id="text1"
+     transform="translate(8.9140587,5.5572756)"><tspan
+       x="-2.1176469"
+       y="12.148606"
+       id="tspan2">+</tspan></text>
+</svg>
