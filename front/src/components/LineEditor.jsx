@@ -4,8 +4,8 @@ import EditorCanvas from './EditorCanvas'
 import Wall from '../Wall'
 import { dist } from '../util'
 
-export default function LineEditor() {
-    const [walls, setWalls] = useState([])
+export default function LineEditor({ walls, setWalls }) {
+    // const [walls, setWalls] = useState([])
     const [isDragging, setIsDragging] = useState(false)
     const [selectedKey, setSelectedKey] = useState()
 
@@ -18,7 +18,6 @@ export default function LineEditor() {
     }
 
     const handleMouseUp = (e) => {
-        console.log('mouseup')
         const lastWall = walls[walls.length-1]
         if (lastWall.length() < 10) {
             // click
@@ -57,7 +56,7 @@ export default function LineEditor() {
     const handleMouseDown = (e) => {
         setIsDragging(true)
         const coords = getCoords(e)
-        setWalls(walls => [...walls, new Wall(coords, coords)])
+        setWalls([...walls, new Wall(coords, coords)])
     }
 
     const selectedWall = () => {

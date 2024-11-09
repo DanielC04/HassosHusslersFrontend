@@ -6,13 +6,15 @@ import WallStrip from './components/WallStrip'
 import Elevator from './components/Elevator'
 import Shaft from './components/Shaft'
 import { DraggableInstance } from './components/DraggableInstance'
+import Wall from './components/Wall'
 
 const WORLD_SIZE = 40
 
 export default function ModelViewer(props) {
-    const wallStrip = [[0, 0], [8, 0], [12, 3], [8, 5], [0, 5]]
+    // const wallStrip = [[0, 0], [8, 0], [12, 3], [8, 5], [0, 5]]
     const [isCameraControlActive, setCameraControlActive] = useState(true);
     console.log(isCameraControlActive)
+    console.log('viewer', props.floors[0])
 
     return (
         <div className='w-full h-screen'>
@@ -21,7 +23,11 @@ export default function ModelViewer(props) {
                 <spotLight position={[WORLD_SIZE/2, WORLD_SIZE/2, WORLD_SIZE/2]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                 <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
 
-                <WallStrip data={wallStrip} width={0.5} height={4} closeStrip={true}></WallStrip>
+                {/* <WallStrip data={wallStrip} width={0.5} height={4} closeStrip={true}></WallStrip> */}
+                { props.floors[0].map(wall => {
+                    console.log('map', wall)
+                    return <Wall key={wall.key} p1={wall.start} p2={wall.end}/>
+                })}
                 <DraggableInstance setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
                     <Elevator setCameraActive={setCameraControlActive}></Elevator>
                 </DraggableInstance>

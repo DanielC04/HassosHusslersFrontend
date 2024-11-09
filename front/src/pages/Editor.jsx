@@ -51,7 +51,7 @@ function FloorAddButton({ value, handleBtnPress }) {
         </>;
 }
 
-export default function Editor({ setPage }) {
+export default function Editor({ setPage, floors, setFloors }) {
     const uploadedFiles = useRef([]);
     const uploadDict = useRef({0: null});
 
@@ -83,6 +83,7 @@ export default function Editor({ setPage }) {
             }
 
             uploadDict.current[selectedFloor] = index;
+            setWallsInFloor(selectedFloor, []);
 
             setForceUpdate(!forceUpdate);
 
@@ -100,19 +101,25 @@ export default function Editor({ setPage }) {
 
             uploadedFiles.current[uploadDict.current[value]] = null;
 
+            let newFloors = {...floors};
             if (value >= 0) {
-                for (let i = value+1; i < floorArray[0]; i++) {
+                for (let i = value+1; i <= floorArray[0]; i++) {
                     uploadDict.current[i-1] = uploadDict.current[i];
+                    newFloors[i-1] = newFloors[i];
                 }
                 delete uploadDict.current[floorArray[0]];
+                delete newFloors[floorArray[0]];
                 setSelectedFloor(selectedFloor - 1);
             } else {
-                for (let i = value-1; i < floorArray[floorArray.length - 1]; i++) {
+                for (let i = floorArray[floorArray.length - 1]; i <= value - 1; i++) {
                     uploadDict.current[i+1] = uploadDict.current[i];
+                    newFloors[i+1] = newFloors[i];
                 }
                 delete uploadDict.current[floorArray[floorArray.length - 1]];
+                delete newFloors[floorArray[floorArray.length - 1]];
                 setSelectedFloor(selectedFloor + 1);
             }
+            setFloors(newFloors)
 
             setFloorArray(value >= 0 ? floorArray.slice(1) : floorArray.slice(0, -1));
 
@@ -126,19 +133,25 @@ export default function Editor({ setPage }) {
     function addFloorAbove() {
         const newFloorArray = [floorArray[0] + 1, ...floorArray.slice()];
         setFloorArray(newFloorArray);
+        setWallsInFloor(floorArray[0] + 1, null);
         uploadDict.current[floorArray[0] + 1] = null;
     }
 
     function addFloorBelow() {
         const newFloorArray = [...floorArray.slice(), floorArray[floorArray.length - 1] - 1];
         setFloorArray(newFloorArray);
+        setWallsInFloor(floorArray[floorArray.length - 1] - 1, null);
         uploadDict.current[floorArray[floorArray.length - 1] - 1] = null;
     }
 
     function deleteCurrentFloorplan() {
         uploadedFiles.current[uploadDict.current[selectedFloor]] = null;
         uploadDict.current[selectedFloor] = null;
+    }
         
+    function setWallsInFloor(floor, walls) {
+        let newFloors = {...floors, [floor]: walls};
+        return setFloors(newFloors);
     }
 
     return <div className="flex">
@@ -158,7 +171,7 @@ export default function Editor({ setPage }) {
                         <button onClick={() => setPage('viewer')} className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center">Create 3D Model</button>
                     </div>
                     <div className="flex flex-row justify-center h-full items-center">
-                        <LineEditor className="my-auto" />
+                        <LineEditor walls={floors[selectedFloor]} setWalls={(w) => setWallsInFloor(selectedFloor, w)} className="my-auto" />
                     </div>
                 </div>
             }
