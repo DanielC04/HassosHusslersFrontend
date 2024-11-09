@@ -1,17 +1,15 @@
-import { useEffect, useState, useRef } from 'react'
+import { useState } from 'react'
 import FloorTest from '../assets/floortest.svg'
 import EditorCanvas from './EditorCanvas'
-import { dist } from '../util'
 import Wall from '../Wall'
+import { dist } from '../util'
 
 export default function LineEditor() {
-    // const [walls, setWalls] = useState([])
-    // const [selectedWall, setSelectedWall] = useState()
-    const walls = useRef([])
+    const [walls, setWalls] = useState([])
+    const [isDragging, setIsDragging] = useState(false)
+    const [selectedKey, setSelectedKey] = useState()
 
-    // console.log('render', walls)
-
-    function getCoords(e) {
+    const getCoords = (e) => {
         // https://stackoverflow.com/a/42111623/10666216
         let rect = e.target.getBoundingClientRect();
         let x = e.clientX - rect.left; //x position within the element.
@@ -19,65 +17,81 @@ export default function LineEditor() {
         return [x,y]
     }
 
-    function handleMouseUp(e) {
-        // if (tempWall.current.length() < 10) {
+    const handleMouseUp = (e) => {
+        console.log('mouseup')
+        const lastWall = walls[walls.length-1]
+        if (lastWall.length() < 10) {
             // click
-            // console.log('click')
-            // const coords = getCoords(e)
-            // let minDist = 0
-            // let nearestWall = null
-            // for (const wall of walls) {
-            //     let mid = wall.midPoint()
-            //     let d = dist(mid, coords)
-            //     if (d < minDist || !nearestWall) {
-            //         nearestWall = wall
-            //         minDist = d
-            //     }
-            // }
-            // if (nearestWall) {
-            //     setSelectedWall(nearestWall.key)
-            // }
-        // } else {
-            // drag
-            // console.log('drag', walls, [...walls, tempWall.current])
-            // setWalls([...walls, tempWall.current])
-        // }
-        document.removeEventListener('mousemove', handleMouseMove)
-        document.removeEventListener('mouseup', handleMouseUp)
+            setWalls(walls.filter(wall => wall.key != lastWall.key))
+            const mouse = getCoords(e)
+            let minDist = 0
+            let closestKey = null
+            walls.forEach(wall => {
+                if (wall.key != lastWall.key) {
+                    const mouseDist = dist(mouse, wall.midPoint())
+                    if (mouseDist < minDist || closestKey==null) {
+                        closestKey = wall.key
+                        minDist = mouseDist
+                    }
+                }
+            })
+            setSelectedKey(closestKey)
+        }
+        setIsDragging(false)
     }
 
-    function handleMouseMove(e) {
-        console.log('move', walls.current)
-        let coords = getCoords(e)
-        walls.current[walls.current.length-1].end = coords
-        // setWalls(walls.map(w => {
-        //     if (w.key == selectedWall) {
-        //         w.end = coords
-        //     }
-        //     return w
-        // }))
-        // walls[0].end = coords
-        // tempWall.current.end = coords
+    const handleMouseMove = (e) => {
+        if (isDragging) {
+            setWalls(walls.map((wall, i) => {
+                if (i == walls.length-1) {
+                    let draggedWall = wall.copy()
+                    draggedWall.end = getCoords(e)
+                    return draggedWall
+                } else {
+                    return wall
+                }
+            }))
+        }
     }
 
-    function handleMouseDown(e) {
-        let coords = getCoords(e)
-        const newWall = new Wall(coords, coords)
-        // tempWall.current = newWall
-        console.log('setting', walls.current)
-        // setWalls([...walls, newWall])
-        walls.current.push(newWall)
-        document.addEventListener('mousemove', handleMouseMove) // use capture? 
-        document.addEventListener('mouseup', handleMouseUp)
+    const handleMouseDown = (e) => {
+        setIsDragging(true)
+        const coords = getCoords(e)
+        setWalls(walls => [...walls, new Wall(coords, coords)])
     }
 
-    useEffect(() => {
-        document.addEventListener('mousedown', handleMouseDown)
-        return () => document.removeEventListener('mousedown', handleMouseDown)
-    }, [])
+    const selectedWall = () => {
+        return walls.find(w => w.key == selectedKey)
+    }
 
-    return <div className="h-[500px] w-[500px] flex relative">
-        {/* <EditorCanvas w={500} h={500} walls={walls} selected={selectedWall} /> */}
-        <img className="flex-1" src={FloorTest} />
-    </div>
+    const deleteSelected = (e) => {
+        e.stopPropagation()
+        setWalls(walls.filter(w => w.key != selectedKey))
+        setSelectedKey()
+    }
+
+    return (
+        <div 
+            onMouseDown={handleMouseDown} 
+            onMouseUp={handleMouseUp} 
+            onMouseMove={handleMouseMove} 
+            className="h-[500px] w-[500px] flex relative"
+        >
+            <EditorCanvas w={500} h={500} walls={walls} selectedKey={selectedKey} />
+            <img className="flex-1" src={FloorTest} />
+            { selectedKey &&
+                <button
+                    style={{ 
+                        left: selectedWall().midPoint()[0],
+                        top: selectedWall().midPoint()[1],
+                    }}
+                    onMouseUp={deleteSelected} 
+                    onMouseDown={e => e.stopPropagation()}
+                    className='absolute bg-red-600 text-white p-1 rounded'
+                >
+                    Delete
+                </button>
+            }
+        </div>
+    )
 }
