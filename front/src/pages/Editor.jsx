@@ -51,7 +51,7 @@ function FloorAddButton({ value, handleBtnPress }) {
         </>;
 }
 
-export default function Editor({ setPage }) {
+export default function Editor({ setPage, floors, setFloors }) {
     const uploadedFiles = useRef([]);
     const uploadDict = useRef({0: null});
 
@@ -116,6 +116,7 @@ export default function Editor({ setPage }) {
     function addFloorAbove() {
         const newFloorArray = [floorArray[0] + 1, ...floorArray.slice()];
         setFloorArray(newFloorArray);
+        setWalls(, [])
         uploadDict.current[floorArray[0] + 1] = null;
     }
 
@@ -123,6 +124,11 @@ export default function Editor({ setPage }) {
         const newFloorArray = [...floorArray.slice(), floorArray[floorArray.length - 1] - 1];
         setFloorArray(newFloorArray);
         uploadDict.current[floorArray[floorArray.length - 1] - 1] = null;
+    }
+
+    function setWalls(floor, walls) {
+        let newFloors = {...floors, [floor]: walls}
+        setFloors(newFloors)
     }
 
     return <div className="flex">
@@ -133,7 +139,7 @@ export default function Editor({ setPage }) {
                     <FloorAddButton value="+" handleBtnPress={addFloorBelow}/>
                 </div>
             </div>
-            <LineEditor />
+            <LineEditor walls={ floors[selectedFloor] } setWalls={(walls) => setWalls(selectedFloor, walls)}/>
             <button onClick={() => setPage('viewer')}>View 3D Model</button>
             {/* <UploadConglomerate handleFileChange={handleFileChange}/> */}
         </div>;
