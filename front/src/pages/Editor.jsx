@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import LineEditor from '../components/LineEditor'
 
 function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtnHavingness }) {
     /*bg-slate-400 hover:bg-slate-500
@@ -132,6 +133,7 @@ export default function Editor() {
                     <FloorAddButton value="+" handleBtnPress={addFloorBelow}/>
                 </div>
             </div>
-            <UploadConglomerate handleFileChange={handleFileChange}/>
+            <LineEditor />
+            {/* <UploadConglomerate handleFileChange={handleFileChange}/> */}
         </div>;
 }
