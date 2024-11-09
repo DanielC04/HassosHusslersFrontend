@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Canvas  } from '@react-three/fiber'
+import { Canvas, useThree  } from '@react-three/fiber'
 import Elevator from './components/Elevator'
 import FloorElement from './Scene/Floor'
 import Shaft from './components/Shaft'
 import { DraggableInstance } from './Scene/DraggableInstance'
 import Floor from '../../Floor'
 import CameraControls from './Scene/CameraControls'
+import { Grid, Sky } from '@react-three/drei'
 
 const WORLD_SIZE = 40
 
@@ -40,13 +41,21 @@ export default function ModelViewer(props) {
     }, [])
 
 
+
     return (
         <div className='w-full h-screen'>
             <Canvas>
                 <ambientLight intensity={Math.PI / 2} />
-                <spotLight position={[WORLD_SIZE/2, WORLD_SIZE/2, WORLD_SIZE/2]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
+                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                 <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-
+                <Sky distance={450000} sunPosition={[0, 1, 0]} {...props}
+                    // turbidity={10}
+					// rayleigh={2}
+					// mieCoefficient={0.005}
+					// mieDirectionalG={0.8}
+					// inclination={0.49}
+					// azimuth={0.25}
+                />
                 {
                     renderedFloors
                 }
@@ -58,7 +67,15 @@ export default function ModelViewer(props) {
                 <DraggableInstance setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
                     <Shaft setCameraActive={setCameraControlActive}></Shaft>
                 </DraggableInstance>
-                <gridHelper />
+                {/* <gridHelper args={[1000, 100]} color={'red'} /> */}
+                <Grid 
+                    infiniteGrid={true}
+                    cellSize={2}
+                    sectionSize={20}
+                    fadeDistance={400}
+                    fadeStrength={5}
+                    sectionColor={'#003049'}
+                />
                 
                 {/* <Environment preset='park' background backgroundBlurriness={0.52} /> */}
                 <CameraControls isCameraControlActive={isCameraControlActive}/>
