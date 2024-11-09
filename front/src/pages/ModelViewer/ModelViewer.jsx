@@ -49,7 +49,7 @@ export default function ModelViewer(props) {
                 </DraggableInstance>
                 <gridHelper />
                 
-                {/* <Environment preset='park' background backgroundBlurriness={0.52} /> */}
+                <Environment preset='park' background backgroundBlurriness={0.52} />
 
                 <MapControls
                     enabled={isCameraControlActive}
