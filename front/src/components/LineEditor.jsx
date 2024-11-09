@@ -4,8 +4,8 @@ import EditorCanvas from './EditorCanvas'
 import Wall from '../Wall'
 import { dist } from '../util'
 
-export default function LineEditor() {
-    const [walls, setWalls] = useState([])
+export default function LineEditor({ walls, setWalls }) {
+    // const [walls, setWalls] = useState([])
     const [isDragging, setIsDragging] = useState(false)
     const [selectedKey, setSelectedKey] = useState()
 
