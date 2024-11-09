@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Canvas  } from '@react-three/fiber'
-import { OrbitControls, MapControls, Environment } from '@react-three/drei'
-import { Ground } from './components/Ground'
-import WallStrip from './components/WallStrip'
 import Elevator from './components/Elevator'
-import FloorElement from './components/Floor'
+import FloorElement from './Scene/Floor'
 import Shaft from './components/Shaft'
-import { DraggableInstance } from './components/DraggableInstance'
-import Wall from './components/Wall'
-
+import { DraggableInstance } from './Scene/DraggableInstance'
+import Floor from '../../Floor'
+import CameraControls from './Scene/CameraControls'
 
 const WORLD_SIZE = 40
 
@@ -27,6 +24,20 @@ export default function ModelViewer(props) {
         renderedFloors.push(<FloorElement key={floorIndex} floor={floor} z={z}/>)
         z += floor.height;
     }
+
+    useEffect(() => {
+        // make sure building always is centered in 3D view
+        const groundFloor = props.floors[0];
+        let totalX = 0;
+        let totalY = 0;
+        for (let wall of groundFloor.walls) {
+            totalX += wall.start[0] + wall.end[0]
+            totalY += wall.start[1] + wall.end[1]
+        }
+        const average_x = totalX / 2 / groundFloor.walls.length;
+        const average_y = totalY / 2 / groundFloor.walls.length;
+        Floor.offset = [average_x, average_y]
+    }, [])
 
 
     return (
@@ -50,26 +61,7 @@ export default function ModelViewer(props) {
                 <gridHelper />
                 
                 {/* <Environment preset='park' background backgroundBlurriness={0.52} /> */}
-
-                <MapControls
-                    enabled={isCameraControlActive}
-                    position0={[10, 10, 10]}
-                    zoom0={0.10}
-                 />
-                {/* <OrbitControls
-                    enableDamping={true}
-                    dampingFactor={0.05}
-                    enableZoom={true}
-                    zoomSpeed={1.0}
-                    autoRotate={false}
-                    autoRotateSpeed={2.0}
-                    // maxPolarAngle={Math.PI / 2}
-                    minAzimuthAngle={-Math.PI / 4}    // Limits left horizontal rotation to -45 degrees
-                    maxAzimuthAngle={Math.PI / 4}     // Limits right horizontal rotation to 45 degrees
-                    minDistance={2}
-                    maxDistance={50}
-                    enabled={isCameraControlActive}/> */}
-                {/* <Ground width={WORLD_SIZE} height={WORLD_SIZE}></Ground> */}
+                <CameraControls isCameraControlActive={isCameraControlActive}/>
             </Canvas>
             <div className='top-0 left-0 m-2 absolute cursor-pointer' onClick={() => props.setPage("editor")}>Back</div>
         </div>
