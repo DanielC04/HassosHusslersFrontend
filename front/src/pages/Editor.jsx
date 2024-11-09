@@ -28,7 +28,7 @@ function DeleteButton() {
 function UploadConglomerate({ handleFileChange }) {
 
     return <div className="m-auto flex flex-col items-center">
-            <label htmlFor="floorplanupload" className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+            <label htmlFor="floorplanupload" className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center">
                 <svg className="fill-current w-4 h-4 mr-2" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 374.116 374.116" xmlSpace="preserve">
                     <g>
                         <path d="M344.058,207.506c-16.568,0-30,13.432-30,30v76.609h-254v-76.609c0-16.568-13.432-30-30-30c-16.568,0-30,13.432-30,30
@@ -58,6 +58,8 @@ export default function Editor({ setPage }) {
     const [floorArray, setFloorArray] = useState([0]);
     const [selectedFloor, setSelectedFloor] = useState(0);
     const [hasFloorbtn, setHasFloorbtn] = useState(false);
+
+    const [forceUpdate, setForceUpdate] = useState(false);
     
     function handleFileChange(e) {
         if (e.target.files) {
@@ -82,7 +84,7 @@ export default function Editor({ setPage }) {
 
             uploadDict.current[selectedFloor] = index;
 
-            setFloorArray(floorArray);
+            setForceUpdate(!forceUpdate);
 
             console.log(receivedFile);
         }
@@ -133,6 +135,12 @@ export default function Editor({ setPage }) {
         uploadDict.current[floorArray[floorArray.length - 1] - 1] = null;
     }
 
+    function deleteCurrentFloorplan() {
+        uploadedFiles.current[uploadDict.current[selectedFloor]] = null;
+        uploadDict.current[selectedFloor] = null;
+        
+    }
+
     return <div className="flex">
             <div className="flex h-screen">
                 <div className="my-auto">
@@ -144,10 +152,15 @@ export default function Editor({ setPage }) {
             {!uploadedFiles.current[uploadDict.current[selectedFloor]] ?
                 <UploadConglomerate handleFileChange={handleFileChange}/>
                 :
-                <>
-                <LineEditor />
-                <button onClick={() => setPage('viewer')}>View 3D Model</button>
-                </>
+                <div className="flex flex-col w-full">
+                    <div className="flex flex-row justify-end items-end m-6">
+                        <button onClick={deleteCurrentFloorplan} className="bg-slate-100 hover:bg-slate-200 text-black py-2 px-4 rounded inline-flex items-center mx-4">Remove Floor Plan</button>
+                        <button onClick={() => setPage('viewer')} className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center">Create 3D Model</button>
+                    </div>
+                    <div className="flex flex-row justify-center h-full items-center">
+                        <LineEditor className="my-auto" />
+                    </div>
+                </div>
             }
         </div>;
 }
