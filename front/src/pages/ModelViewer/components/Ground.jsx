@@ -10,8 +10,8 @@ export function Ground(props) {
         <mesh
         {...props}
         ref={ref}>
-        <planeGeometry args={[width, height]} position={[width/2., height/2., 0]} />
-        <meshBasicMaterial color={'grey'} />
+            <planeGeometry args={[width, height]} position={[width/2., height/2., 0]} />
+            <meshBasicMaterial color={'grey'} />
         </mesh>
     )
 }
