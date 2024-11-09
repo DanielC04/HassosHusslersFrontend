@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import LineEditor from '../components/LineEditor';
 import LeTriangle from '../assets/triangle.svg';
 import uploadLogo from '../assets/upload.svg';
+import monoplanLogo from '../assets/monoplanlogo.png';
 import Floor from '../Floor';
 
 function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtnHavingness }) {
@@ -275,6 +276,9 @@ export default function Editor({ setPage, floors, setFloors }) {
 
     return <>
         <Popup hidden={popupState[0]} text={popupState[1]} hideSelf={popupState[2]} continueCallback={popupState[3]}/>
+        <a className="absolute top-0 left-0" href="https://www.junction2024.com/">
+            <img src={monoplanLogo} className="h-28"/>
+        </a>
         <div className="flex">
             <div className="flex h-screen">
                 <div className="my-auto">
