@@ -5,9 +5,7 @@ import Wall from '../Wall'
 import { dist } from '../util'
 
 export default function LineEditor({ walls, setWalls }) {
-    return <div>adsf</div>
     // const [walls, setWalls] = useState([])
-    console.log('lineedit', walls)
     const [isDragging, setIsDragging] = useState(false)
     const [selectedKey, setSelectedKey] = useState()
 
@@ -20,7 +18,6 @@ export default function LineEditor({ walls, setWalls }) {
     }
 
     const handleMouseUp = (e) => {
-        console.log('mouseup')
         const lastWall = walls[walls.length-1]
         if (lastWall.length() < 10) {
             // click
@@ -59,7 +56,7 @@ export default function LineEditor({ walls, setWalls }) {
     const handleMouseDown = (e) => {
         setIsDragging(true)
         const coords = getCoords(e)
-        setWalls(walls => [...walls, new Wall(coords, coords)])
+        setWalls([...walls, new Wall(coords, coords)])
     }
 
     const selectedWall = () => {

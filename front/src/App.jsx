@@ -9,7 +9,7 @@ function App() {
   if (page == 'editor') {
     return <Editor setPage={setPage} floors={floors} setFloors={setFloors}/>
   } else {
-    return <ModelViewer setPage={setPage} />
+    return <ModelViewer setPage={setPage} floors={floors} />
   }
 }
 
