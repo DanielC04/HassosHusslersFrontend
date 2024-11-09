@@ -3,22 +3,25 @@ import Wall from './Wall'
 import { Vector3 } from 'three';
 import { extend } from '@react-three/fiber'
 import { ConvexGeometry } from 'three/examples/jsm/Addons.js';
+import Floor from '../../../Floor';
 
 extend({ ConvexGeometry });
 
-export default function Floor({ walls, width, height, z}) {
+export default function FloorElement({ floor, width, z}) {
 
     const [hullGeometry, setHullGeometry] = useState(null);
 
     if (!width) width = 0.2;
-    if (!height) height = 5;
+    const walls = floor.walls;
 
     useEffect(() => {
-        // if (z !== 0) return;
+        if (z !== 0) return;
         const pointsForConvexHull = [];
         for (let wall of walls){
-            pointsForConvexHull.push(new Vector3(wall.start[0], 0, wall.start[1]));
-            pointsForConvexHull.push(new Vector3(wall.end[0], 0.1, wall.end[1]))
+            const start = floor.pixelToMeter(wall.start)
+            const end = floor.pixelToMeter(wall.end)
+            pointsForConvexHull.push(new Vector3(start[0], 0, start[1]));
+            pointsForConvexHull.push(new Vector3(end[0], 0.1, end[1]))
         }
 
         const convexHull = new ConvexGeometry(pointsForConvexHull);
@@ -28,13 +31,15 @@ export default function Floor({ walls, width, height, z}) {
     return (
         <>
             {
-                // z == 0 && 
+                z == 0 && hullGeometry &&
                 <mesh geometry={hullGeometry}>
                     <meshBasicMaterial color={'grey'} />
                 </mesh>
             }
             { walls.map(wall => {
-                return <Wall key={wall.key} p1={wall.start} p2={wall.end} width={width} height={height} z={z}/>
+                const start = floor.pixelToMeter(wall.start);
+                const end = floor.pixelToMeter(wall.end);
+                return <Wall key={wall.key} p1={start} p2={end} width={width} height={floor.height} z={z}/>
             })}
         </>
     )

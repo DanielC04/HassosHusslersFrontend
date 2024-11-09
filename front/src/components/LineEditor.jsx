@@ -1,13 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import FloorTest from '../assets/floortest.svg'
 import EditorCanvas from './EditorCanvas'
 import Wall from '../Wall'
 import { dist } from '../util'
 
-export default function LineEditor({ walls, setWalls }) {
+export default function LineEditor({ walls, setWalls, planSvg }) {
     // const [walls, setWalls] = useState([])
     const [isDragging, setIsDragging] = useState(false)
     const [selectedKey, setSelectedKey] = useState()
+    const imgRef = useRef()
+    console.log('lineedit', planSvg)
+
+    function renderSvgToImg(svgFile, imgElement) {
+        if (!(svgFile instanceof Blob)) {
+            console.error("Input is not a Blob or File object");
+            return;
+        }
+    
+        const reader = new FileReader();
+        
+        reader.onload = function(event) {
+            imgElement.src = event.target.result;
+        };
+    
+        reader.onerror = function(error) {
+            console.error("Error reading SVG file:", error);
+        };
+    
+        reader.readAsDataURL(svgFile);
+    }
 
     const getCoords = (e) => {
         // https://stackoverflow.com/a/42111623/10666216
@@ -69,6 +90,10 @@ export default function LineEditor({ walls, setWalls }) {
         setSelectedKey()
     }
 
+    useEffect(() => {
+        renderSvgToImg(planSvg, imgRef.current)
+    }, [planSvg])
+
     return (
         <div 
             onMouseDown={handleMouseDown} 
@@ -77,8 +102,8 @@ export default function LineEditor({ walls, setWalls }) {
             className="h-[500px] w-[500px] flex relative"
         >
             <EditorCanvas w={500} h={500} walls={walls} selectedKey={selectedKey} />
-            <img className="flex-1" src={FloorTest} />
-            { selectedKey &&
+            <img className="flex-1" ref={imgRef} />
+            { selectedWall() &&
                 <button
                     style={{ 
                         left: selectedWall().midPoint()[0],
