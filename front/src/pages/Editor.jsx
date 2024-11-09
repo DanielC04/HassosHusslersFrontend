@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import LineEditor from '../components/LineEditor';
 import LeTriangle from '../assets/triangle.svg';
-import uploadLogo from '../assets/uploadlogo.svg';
+import uploadLogo from '../assets/upload.svg';
 import Floor from '../Floor';
 
 function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtnHavingness }) {
@@ -12,7 +12,7 @@ function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtn
 
     return isSelected ? 
         <>
-            <button onClick={() => handleBtnPress(value)} onMouseLeave={setFloorbtnHavingness} className={(value == 0 || !hasFloorbtn ? "" : "floorbtn ") + "m-4 bg-slate-700 flex items-center justify-center w-10 h-10 text-slate-100 transition-colors duration-150 rounded-full focus:shadow-outline"}><span>{ value }</span></button>
+            <button onClick={() => handleBtnPress(value)} onMouseLeave={setFloorbtnHavingness} className={(value == 0 || !hasFloorbtn ? "" : "floorbtn ") + "m-4 bg-[#121212] flex items-center justify-center w-10 h-10 text-slate-100 transition-colors duration-150 rounded-full focus:shadow-outline"}><span>{ value }</span></button>
         </>
         : 
         <>
@@ -22,13 +22,21 @@ function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtn
 
 function UploadConglomerate({ handleFileChange }) {
 
-    return <div className="m-auto flex flex-col items-center">
-            <label htmlFor="floorplanupload" className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+    /*return <div className="m-auto flex flex-col items-center">
+            <label htmlFor="floorplanupload" className="bg-[#121212] hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center ">
                 <img src={uploadLogo} className="fill-current w-4 h-4 mr-2" />
-                <span>Upload</span>
+                <span className=''>Upload floor plan</span>
             </label>
             <input id="floorplanupload" type="file" accept="image/svg+xml" onChange={handleFileChange}/>
-        </div>;
+        </div>;*/
+
+    return  <div className="m-auto flex flex-col items-center py-8 px-20 border-dashed border-2 border-[#121212]/[.30] rounded-lg">
+        <img src={uploadLogo} className="fill-current w-5 h-5 mb-2" />
+        <span className=' text-[#121212]'>Upload a floor plan here</span>
+        <span className=' text-[#b7b9bd]'>SVG format, up to 100 MB</span>
+        <label htmlFor="floorplanupload" className="text-[#121212] mt-5  py-2 px-4 rounded items-center border border-[#121212]/[.40]">Browse File</label>
+        <input id="floorplanupload" type="file" accept="image/svg+xml" onChange={handleFileChange}/>
+    </div>;
 }
 
 function FloorAddButton({ handleBtnPress, upsideDown }) {
@@ -49,7 +57,7 @@ function Popup({ hidden = true, text, hideSelf, continueCallback }) {
                         </div>
                     </div>
                     <div className="grow flex flex-row justify-center items-center mx-2">
-                        <button onClick={() => {hideSelf(); cancelCallback()}} className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded items-center my-4 mx-2 w-24">Cancel</button>
+                        <button onClick={() => {hideSelf(); cancelCallback()}} className="bg-[#121212] hover:bg-slate-800 text-white font-bold py-2 px-4 rounded items-center my-4 mx-2 w-24">Cancel</button>
                         <button onClick={() => {hideSelf(); continueCallback()}} className="bg-slate-100 hover:bg-slate-200 text-black py-2 px-4 rounded items-center my-4 mx-2 w-24">Continue</button>
                     </div>
                 </div>
@@ -63,9 +71,9 @@ function HeightInput({ height, setHeight }) {
 
     //console.log(typeof(value), value);
 
-    return <div className="bg-slate-200 px-6 py-4 my-2 rounded-md">
+    return <div className="bg-slate-100 text-black py-2 px-4 rounded inline-flex items-center">
         <label className="mr-4 font-semibold" htmlFor="floorheight">Height:</label>
-        <input className="w-20 mx-2 text-center" id="floorheight" type="text" value={height} onChange={e => {
+        <input className="w-20 mx-2 text-center rounded" id="floorheight" type="text" value={height} onChange={e => {
                 console.log(e.target.value, !!e.target.value);
                 let newVal = e.target.value;
                 if (!newVal) {
@@ -280,12 +288,13 @@ export default function Editor({ setPage, floors, setFloors }) {
                 :
                 <div className="flex flex-col w-full">
                     <div className="flex flex-row justify-end items-end m-6">
+                        <HeightInput height={heightDict.current[selectedFloor]} setHeight={setCurrentHeight}/>
                         <button onClick={deleteCurrentFloorplan} className="bg-slate-100 hover:bg-slate-200 text-black py-2 px-4 rounded inline-flex items-center mx-4 font-semibold">Remove Floor Plan</button>
-                        <button onClick={changeToViewer} className="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center">Create 3D Model</button>
+                        <button onClick={changeToViewer} className="bg-[#121212] hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center">Create 3D Model</button>
                     </div>
                     <div className="flex flex-col justify-center h-full items-center">
                         <div className="flex flex-row justify-center items-center">
-                            <HeightInput height={heightDict.current[selectedFloor]} setHeight={setCurrentHeight}/>
+                            
                         </div>
                         <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]} className="my-auto" />
 
