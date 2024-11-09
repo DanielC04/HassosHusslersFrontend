@@ -7,13 +7,15 @@ from math import tan
 
 # Beispiel 1
 START_THRESHOLD = 240
-CONTINUE_THRESOLD = 220
-EXTENSION_STEP_SIZE = 3
-WINDOW_SIZE = 5
-MIN_LENGTH = 20
+CONTINUE_THRESOLD = 240
+EXTENSION_STEP_SIZE = 2
+WINDOW_SIZE = 4
+MIN_LENGTH = 40
 
 def predict_walls(filepath: str, show_result=False):
     image = cv2.imread(filepath)
+
+    _, image = cv2.threshold(image, 127, 255, cv2.THRESH_TOZERO) 
     original_image = image.copy()
     image_box_cutout = image.copy()
     # Check if the image was successfully loaded
@@ -72,7 +74,7 @@ def predict_walls(filepath: str, show_result=False):
                 x2 = x + WINDOW_SIZE + extended_rows
                 y2 = y + WINDOW_SIZE
                 print(f"CREATE A BOX FROM ({x1}, {y1}) to ({x2}, {y2}) -> HORIZONTAL")
-                image_box_cutout[y1:y2, x1:x2] = [255, 255, 255]
+                image[y1:y2, x1:x2] = [255, 255, 255]
                 original_image[y1:y2, x1:x2] = [255, 0, 0]
                 mid_y = (y1 + y2) / 2.
                 walls.append([[x1, mid_y], [x2, mid_y]])
@@ -94,21 +96,19 @@ def predict_walls(filepath: str, show_result=False):
                 x2 = x + WINDOW_SIZE
                 y2 = y + WINDOW_SIZE + extended_cols
                 print(f"CREATE A BOX FROM ({x1}, {y1}) to ({x2}, {y2}) -> VERTICAL")
-                # image[y1:y2, x1:x2] = [255, 255, 255]
+                image[y1:y2, x1:x2] = [255, 255, 255]
                 original_image[y1:y2, x1:x2] = [255, 0, 0]
 
                 mid_x = (x1 + x2) / 2.
                 walls.append([[mid_x, y1], [mid_x, y2]])
             
     if show_result:
-        f, axarr = plt.subplots(1,3)
+        f, axarr = plt.subplots(1,1)
         # displaying image
-        axarr[0].imshow(original_image)
-        axarr[1].imshow(image)
-        axarr[2].imshow(image_box_cutout)
+        axarr.imshow(original_image)
         plt.show()
 
     return walls
 
 if __name__ == '__main__':
-    predict_walls('/documents/Random/JunctionHackathon/HassosHussler/back/algorithm/output.png', show_result=True)
+    predict_walls('/documents/Random/JunctionHackathon/HassosHussler/back/algorithm/floor_6.png', show_result=True)

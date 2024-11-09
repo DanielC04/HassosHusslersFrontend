@@ -116,6 +116,30 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
         renderSvgToImg(planSvg, imgRef.current)
     }, [planSvg])
 
+    useEffect(() => {
+        // make request to backend server to predict walls
+        const formData = new FormData();
+        formData.append('file', planSvg);
+
+        fetch('http://localhost:5000/predict_walls', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Process the response data
+            console.log(data);
+            if (!data || !data.walls) {
+                throw new Error('Invalid response from server');
+            }
+            setWalls(data.walls.map(wall => new Wall(wall[0], wall[1])));
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    }, [])
+
     return (
         <div 
             className="flex relative overflow-clip"
@@ -151,7 +175,7 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
                         Delete
                     </button>
                 }
-            </div>
         </div>
+    </div>
     )
 }

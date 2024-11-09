@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Wall from './Wall'
+import Wall from '../components/Wall'
 import { Vector3 } from 'three';
 import { extend } from '@react-three/fiber'
 import { ConvexGeometry } from 'three/examples/jsm/Addons.js';
@@ -39,7 +39,7 @@ export default function FloorElement({ floor, width, z}) {
             { walls.map(wall => {
                 const start = floor.pixelToMeter(wall.start);
                 const end = floor.pixelToMeter(wall.end);
-                return <Wall key={wall.key} p1={start} p2={end} width={width} height={floor.height} z={z}/>
+                return <Wall key={wall.key} p1={start} p2={end} width={width} height={floor.height * 3} z={z*3}/>
             })}
         </>
     )

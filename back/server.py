@@ -23,6 +23,7 @@ def predict_walls_route():
     path = tempfile.gettempdir()
     filepath = os.path.join(path, file.filename)
     file.save(filepath)
+    sleep(2)
     
 
     print(file)
@@ -32,30 +33,38 @@ def predict_walls_route():
     png_filepath = os.path.join(path, file.filename + '.png')
     command = f'rsvg-convert -o {png_filepath} {filepath} -w 1000 --background-color=white'
     os.system(command)
+    sleep(0.5)
 
     # Check if the PNG file was created
     if not os.path.exists(png_filepath):
-        return jsonify({"message": "Failed to convert SVG to PNG", "walls": None}), 500
-
-    print(png_filepath)
-
+        response = jsonify({"message": "Failed to convert SVG to PNG", "walls": None})
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response, 500
 
     # Process the SVG file
     try:
         # Use svgpathtools to load paths and attributes
-        walls = predict_walls.predict_walls(png_filepath, True)
+        walls = predict_walls.predict_walls(png_filepath)
+        
         
         # Return a response with some information about the SVG
-        return jsonify({
+        response = jsonify({
             "message": "SVG processed successfully",
             "walls": walls
-        }), 202
+        })
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response, 202
     except Exception as e: 
         print(e)
-        return jsonify({
+        response = jsonify({
             "message": "Error processing SVG :/",
             "walls": None
-        }), 500
+        })
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response, 500
     finally:
         # Clean up the saved file
-        os.remove(filepath)
+        try:
+            os.remove(filepath)
+        except:
+            pass
