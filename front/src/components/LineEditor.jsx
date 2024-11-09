@@ -5,8 +5,8 @@ import Wall from '../Wall'
 import { dist, clamp, distanceToLineSegment } from '../util'
 import BeatLoader from 'react-spinners/BeatLoader'
 
-const WIDTH = 900
-const HEIGHT = 600
+const WIDTH = 1400
+const HEIGHT = 700
 
 export default function LineEditor({ walls, setWalls, planSvg }) {
     // const [walls, setWalls] = useState([])

@@ -276,11 +276,11 @@ export default function Editor({ setPage, floors, setFloors }) {
 
     return <>
         <Popup hidden={popupState[0]} text={popupState[1]} hideSelf={popupState[2]} continueCallback={popupState[3]}/>
-        <a className="absolute top-0 left-0">
-            <img src={monoplanLogo} className="h-24"/>
+        <a className="absolute top-0 left-0 z-40">
+            <img src={monoplanLogo} className="h-24 z-40"/>
         </a>
         <div className="flex">
-            <div className="flex h-screen">
+            <div className="flex h-screen bg-white z-30">
                 <div className="my-auto">
                     <FloorAddButton upsideDown={false} key="up" handleBtnPress={addFloorAbove}/>
                     { floorArray.map(e => <FloorKnob key={e} value={e} handleBtnPress={handleFloorPress} isSelected={e == selectedFloor} hasFloorbtn={hasFloorbtn} setFloorbtnHavingness={() => setHasFloorbtn(true)}/>) }
