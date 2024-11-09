@@ -11,7 +11,11 @@ export default function Elevator(props) {
         receiveShadow
         geometry={nodes.shaft.geometry}
         material={materials["M_Model"]}
+<<<<<<< HEAD
         rotation={[degToRad(90), degToRad(0), 0]}
+=======
+        rotation={[0, degToRad(0), 0]}
+>>>>>>> 6e5cc3f (rotated world by 90deg)
         scale={2}
       >
             <meshBasicMaterial color={'darkblue'} wireframe={true} />
