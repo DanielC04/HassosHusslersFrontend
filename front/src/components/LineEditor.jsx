@@ -123,7 +123,7 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
             onWheel={handleScroll}
         >
             { !hasLoaded &&
-                <BeatLoader className='absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%]' size={20} />
+                <BeatLoader className='absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] text-slate-700' size={20} />
             }
             <div 
                 ref={wrapperRef} 
