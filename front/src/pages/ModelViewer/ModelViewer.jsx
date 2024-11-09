@@ -24,9 +24,11 @@ export default function ModelViewer(props) {
                 <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
 
                 {/* <WallStrip data={wallStrip} width={0.5} height={4} closeStrip={true}></WallStrip> */}
-                { props.floors[0].map(wall => {
+                { props.floors[0].walls.map(wall => {
                     console.log('map', wall)
-                    return <Wall key={wall.key} p1={wall.start} p2={wall.end}/>
+                    const start = props.floors[0].pixelToMeter(wall.start)
+                    const end = props.floors[0].pixelToMeter(wall.end)
+                    return <Wall key={wall.key} p1={start} p2={end}/>
                 })}
                 <DraggableInstance setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
                     <Elevator setCameraActive={setCameraControlActive}></Elevator>

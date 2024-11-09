@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import LineEditor from '../components/LineEditor'
+import Floor from '../Floor'
 
 function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtnHavingness }) {
     /*bg-slate-400 hover:bg-slate-500
@@ -143,7 +144,10 @@ export default function Editor({ setPage, floors, setFloors }) {
     }
 
     function setWallsInFloor(floor, walls) {
-        let newFloors = {...floors, [floor]: walls};
+        let modifiedFloor = floors[floor]
+        if (modifiedFloor) modifiedFloor.walls = walls
+        else modifiedFloor = new Floor()
+        let newFloors = {...floors, [floor]: modifiedFloor};
         return setFloors(newFloors);
     }
 
@@ -159,7 +163,7 @@ export default function Editor({ setPage, floors, setFloors }) {
                 <UploadConglomerate handleFileChange={handleFileChange}/>
                 :
                 <>
-                    <LineEditor walls={floors[selectedFloor]} setWalls={(w) => setWallsInFloor(selectedFloor, w)}/>
+                    <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]}/>
                     <button onClick={() => setPage('viewer')}>View 3D Model</button>
                 </>
             }
