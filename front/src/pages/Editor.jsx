@@ -13,7 +13,7 @@ function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtn
 
     return isSelected ? 
         <>
-            <button onClick={() => handleBtnPress(value)} onMouseLeave={setFloorbtnHavingness} className={(value == 0 || !hasFloorbtn ? "" : "floorbtn ") + "m-4 bg-[#121212] flex items-center justify-center w-10 h-10 text-slate-100 transition-colors duration-150 rounded-full focus:shadow-outline"}><span>{ value }</span></button>
+            <button onClick={() => handleBtnPress(value)} onMouseLeave={setFloorbtnHavingness} className={(value == 0 || !hasFloorbtn ? "" : "floorbtn ") + "m-4 bg-[#1550f6] flex items-center justify-center w-10 h-10 text-slate-100 transition-colors duration-150 rounded-full focus:shadow-outline"}><span>{ value }</span></button>
         </>
         : 
         <>
@@ -276,6 +276,7 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
 
     return <>
         <Popup hidden={popupState[0]} text={popupState[1]} hideSelf={popupState[2]} continueCallback={popupState[3]}/>
+
         <a className="absolute top-0 left-0 z-40">
             <img src={monoplanLogo} className="h-24 z-40"/>
         </a>
@@ -291,10 +292,10 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
                 <UploadConglomerate handleFileChange={handleFileChange}/>
                 :
                 <div className="flex flex-col w-full">
-                    <div className="flex flex-row justify-end items-end m-6">
+                    <div className="flex flex-row justify-end items-end m-6 bg-white z-30 h-auto">
                         <HeightInput height={heightDict.current[selectedFloor]} setHeight={setCurrentHeight}/>
                         <button onClick={deleteCurrentFloorplan} className="bg-slate-100 hover:bg-slate-200 text-black py-2 px-4 rounded inline-flex items-center mx-4 font-semibold">Remove Floor Plan</button>
-                        <button onClick={changeToViewer} className="bg-[#121212] hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center">Create 3D Model</button>
+                        <button onClick={changeToViewer} className="bg-[#1550f6] hover:bg-[#073ac5] text-white font-bold py-2 px-4 rounded inline-flex items-center">Create 3D Model</button>
                     </div>
                     <div className="flex flex-col justify-center h-full items-center">
                         <div className="flex flex-row justify-center items-center">
