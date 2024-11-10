@@ -20,7 +20,7 @@ function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtn
         </>;
 }
 
-function UploadConglomerate({ handleFileChange }) {
+function UploadConglomerate({ handleFileChange, setAutomationToggle }) {
 
     /*return <div className="m-auto flex flex-col items-center">
             <label htmlFor="floorplanupload" className="bg-[#121212] hover:bg-slate-800 text-white font-bold py-2 px-4 rounded inline-flex items-center ">
@@ -30,13 +30,18 @@ function UploadConglomerate({ handleFileChange }) {
             <input id="floorplanupload" type="file" accept="image/svg+xml" onChange={handleFileChange}/>
         </div>;*/
 
-    return  <div className="m-auto flex flex-col items-center py-8 px-20 border-dashed border-2 border-[#121212]/[.30] rounded-lg">
+    return  <div className='m-auto flex flex-col items-center'><div className="m-auto flex flex-col items-center py-8 px-20 border-dashed border-2 border-[#121212]/[.30] rounded-lg">
         <img src={uploadLogo} className="fill-current w-5 h-5 mb-2" />
+        
         <span className=' text-[#121212]'>Upload a floor plan here</span>
         <span className=' text-[#b7b9bd]'>SVG format, up to 100 MB</span>
         <label htmlFor="floorplanupload" className="text-[#121212] hover:bg-slate-100 mt-5  py-2 px-4 rounded items-center border border-[#121212]/[.40]">Browse File</label>
         <input id="floorplanupload" type="file" accept="image/svg+xml" onChange={handleFileChange}/>
-    </div>;
+    </div><label class="inline-flex items-center cursor-pointer mt-6">
+            <input type="checkbox" checked onChange={(event) => {setAutomationToggle(event.currentTarget.checked)}} class="sr-only peer"/>
+            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-slate-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <span class="ms-3 text-sm font-medium text-[#121212]">Automated Wall Extraction</span>
+        </label></div>;
 }
 
 function FloorAddButton({ handleBtnPress, upsideDown }) {
@@ -110,6 +115,7 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
     const [selectedFloor, setSelectedFloor] = useState(0);
     const [hasFloorbtn, setHasFloorbtn] = useState(false);
     const [popupState, setPopupState] = useState([true, "", () => 0, () => 0, true]);
+    const [automationToggle, setAutomationToggle] = useState(true);
 
     const [forceUpdate, setForceUpdate] = useState(false);
 
@@ -286,7 +292,7 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
                 </div>
             </div>
             {!uploadedFiles.current[uploadDict.current[selectedFloor]] ?
-                <UploadConglomerate handleFileChange={handleFileChange}/>
+                <UploadConglomerate handleFileChange={handleFileChange} setAutomationToggle={setAutomationToggle}/>
                 :
                 <div className="flex flex-col w-full">
                     <div className="flex flex-row justify-end items-end m-6 bg-white z-30 h-auto">
@@ -298,7 +304,7 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
                         <div className="flex flex-row justify-center items-center">
                             
                         </div>
-                        <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]} className="my-auto" />
+                        <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]} isAutomated={automationToggle} className="my-auto" />
                     </div>
                 </div>
             }

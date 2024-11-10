@@ -8,7 +8,7 @@ import BeatLoader from 'react-spinners/BeatLoader'
 const WIDTH = 1400
 const HEIGHT = 700
 
-export default function LineEditor({ walls, setWalls, planSvg }) {
+export default function LineEditor({ walls, setWalls, planSvg, isAutomated }) {
     // const [walls, setWalls] = useState([])
     const [isDragging, setIsDragging] = useState(false)
     const [selectedKey, setSelectedKey] = useState()
@@ -117,6 +117,7 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
     }, [planSvg])
 
     useEffect(() => {
+        if (!isAutomated) return;
         // make request to backend server to predict walls
         const formData = new FormData();
         formData.append('file', planSvg);
