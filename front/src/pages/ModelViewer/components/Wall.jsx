@@ -14,7 +14,7 @@ export default function Wall(props) {
     }, [])
     const gui = useControls({
         transparent: true
-    }, { })
+    })
 
     return (
         <mesh

@@ -5,6 +5,7 @@ import Wall from './Wall'
 import Floor from './Floor'
 import {sample} from './assets/house-1-floor-2'
 import monoplanLogo from './assets/monoplanlogo.png';
+import { Leva } from 'leva'
 
 function sampleFloor() {
   const out = new Floor()
