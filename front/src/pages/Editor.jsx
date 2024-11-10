@@ -47,7 +47,7 @@ function FloorAddButton({ handleBtnPress, upsideDown }) {
         </>;
 }
 
-function Popup({ hidden = true, text, hideSelf, continueCallback }) {
+function Popup({ hidden = true, text, hideSelf, continueCallback, hasContinue }) {
     return <div className={(hidden ? "invisible" : "visible") + " z-50 absolute flex flex-row min-h-screen justify-center items-center"}>
             <div className="absolute w-screen h-screen left-0 top-0 bg-black/50 justify-center items-center">
                 <div className="flex flex-col justify-stretch absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-black bg-white text-center w-80 h-40 rounded-lg">
@@ -57,8 +57,8 @@ function Popup({ hidden = true, text, hideSelf, continueCallback }) {
                         </div>
                     </div>
                     <div className="grow flex flex-row justify-center items-center mx-2">
-                        <button onClick={() => {hideSelf(); cancelCallback()}} className="bg-[#121212] hover:bg-slate-800 text-white font-bold py-2 px-4 rounded items-center my-4 mx-2 w-24">Cancel</button>
-                        <button onClick={() => {hideSelf(); continueCallback()}} className="bg-slate-100 hover:bg-slate-200 text-black py-2 px-4 rounded items-center my-4 mx-2 w-24">Continue</button>
+                        <button onClick={() => {hideSelf()}} className="bg-[#121212] hover:bg-slate-800 text-white font-bold py-2 px-4 rounded items-center my-4 mx-2 w-24">Cancel</button>
+                        {hasContinue ? <button onClick={() => {hideSelf(); continueCallback()}} className="bg-slate-100 hover:bg-slate-200 text-black py-2 px-4 rounded items-center my-4 mx-2 w-24">Continue</button> : <></>}
                     </div>
                 </div>
             </div>
@@ -66,15 +66,15 @@ function Popup({ hidden = true, text, hideSelf, continueCallback }) {
 }
 
 function HeightInput({ height, setHeight }) {
-    console.log("start val", height);
+    ////console.log("start val", height);
     //const [value, setValue] = useState(height.toString());
 
-    //console.log(typeof(value), value);
+    //////console.log(typeof(value), value);
 
     return <div className="bg-slate-100 text-black py-2 px-4 rounded inline-flex items-center">
         <label className="mr-4 font-semibold" htmlFor="floorheight">Height:</label>
         <input className="w-20 mx-2 text-center rounded" id="floorheight" type="text" value={height} onChange={e => {
-                console.log(e.target.value, !!e.target.value);
+                ////console.log(e.target.value, !!e.target.value);
                 let newVal = e.target.value;
                 if (!newVal) {
                     setHeight("0");
@@ -84,7 +84,7 @@ function HeightInput({ height, setHeight }) {
                 newVal = newVal.replace(",", ".");
                 if (/^[0-9.]*$/.test(newVal) && newVal.split(".").length - 1 <= 1) {
                     let substr = newVal.substring(0, newVal.indexOf("."));
-                    console.log(/^0+$/.test(substr));
+                    ////console.log(/^0+$/.test(substr));
                     if (newVal[0] == '.') newVal = '0'+newVal;
                     else if (/^0+$/.test(substr)) newVal = newVal.slice(newVal.indexOf(".")-1);
                     else {
@@ -109,7 +109,7 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
     const [floorArray, setFloorArray] = useState([0]);
     const [selectedFloor, setSelectedFloor] = useState(0);
     const [hasFloorbtn, setHasFloorbtn] = useState(false);
-    const [popupState, setPopupState] = useState([true, "", () => 0, () => 0]);
+    const [popupState, setPopupState] = useState([true, "", () => 0, () => 0, true]);
 
     const [forceUpdate, setForceUpdate] = useState(false);
 
@@ -155,13 +155,13 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
 
             setForceUpdate(!forceUpdate);
 
-            console.log(receivedFile);
+            ////console.log(receivedFile);
         }
     }
 
     function handleFloorPress(value, skipWarning=false, forceDelete=false) {
         if (value == selectedFloor || forceDelete) {
-            if (!hasFloorbtn) {
+            if (!hasFloorbtn && !forceDelete) {
                 setHasFloorbtn(true);
                 return;
             }
@@ -171,8 +171,9 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
                 setPopupState([
                     false, 
                     "You are deleting a floor plan.",
-                    () => setPopupState([true, "", () => 0, () => 0]),
-                    () => handleFloorPress(value, true)
+                    () => setPopupState([true, "", () => 0, () => 0, true]),
+                    () => handleFloorPress(value, true),
+                    true
                 ]);
                 return;
             }
@@ -205,7 +206,7 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
 
             setFloorArray(value >= 0 ? floorArray.slice(1) : floorArray.slice(0, -1));
 
-            console.log(uploadDict.current);
+            ////console.log(uploadDict.current);
         } else {
             setHasFloorbtn(false);
             setSelectedFloor(value);
@@ -249,39 +250,6 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
 
     function changeToViewer() {
         function changeWindow() {
-            let floor = floorArray[floorArray.length - 1];
-            if (uploadDict.current[0] === null) {
-                let index;
-                for (let i = -1; i >= floorArray[floorArray.length - 1]; i--) {
-                    if (uploadDict.current[i] !== null) {
-                        index = i;
-                        break;
-                    }
-                }
-                for (let i = 1; i <= floorArray[0]; i++) {
-                    if (uploadDict.current[i] !== null) {
-                        index = i;
-                        break;
-                    }
-                }
-                heightDict[0] = heightDict[index];
-                heightDict[index] = "3";
-                let newFloors = {...floors};
-                newFloors[0] = newFloors[index];
-                newFloors[0].height = heightDict[0];
-                newFloors[index] = null;
-                setFloors(newFloors);
-                uploadDict.current[0] = uploadDict.current[index];
-                uploadDict.current[index] = null;
-            }
-            while (floor < floorArray[0]) {
-                if (uploadDict.current[floor] === null) {
-                    handleFloorPress(floor, true, true);
-                } else {
-                    floor++;
-                }
-            }
-            console.log('here', floorArray, uploadDict)
             setPage('viewer');
         }
 
@@ -298,15 +266,16 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
         } else {
             setPopupState([
                 false, 
-                "Render model despite some empty floors?",
-                () => setPopupState([true, "", () => 0, () => 0]),
-                changeWindow
+                "Cannot render model due to empty floors.",
+                () => setPopupState([true, "", () => 0, () => 0, false]),
+                changeWindow,
+                false
             ]);
         }
     }
 
     return <>
-        <Popup hidden={popupState[0]} text={popupState[1]} hideSelf={popupState[2]} continueCallback={popupState[3]}/>
+        <Popup hidden={popupState[0]} text={popupState[1]} hideSelf={popupState[2]} continueCallback={popupState[3]} hasContinue={popupState[4]}/>
 
         <div className={`flex ${hidden ? 'hidden': ''}`}>
             <div className="flex h-screen bg-white z-30">
