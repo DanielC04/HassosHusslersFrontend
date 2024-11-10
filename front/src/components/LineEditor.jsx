@@ -128,11 +128,19 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
         .then(response => response.json())
         .then(data => {
             // Process the response data
-            console.log(data);
+            console.log('fetched data', data);
             if (!data || !data.walls) {
                 throw new Error('Invalid response from server');
             }
-            setWalls(data.walls.map(wall => new Wall(wall[0], wall[1])));
+            // const scaleFactor = imgRef.current.width / 1000
+            const scaleFactor = 0.95
+            const offset = [90, -7]
+            setWalls(data.walls.map(wall => 
+                new Wall(
+                    [wall[0][0]*scaleFactor + offset[0], wall[0][1]*scaleFactor + offset[1]],
+                    [wall[1][0]*scaleFactor + offset[0], wall[1][1]*scaleFactor + offset[1]]
+                )
+            ));
         })
         .catch(error => {
             console.error('Error:', error);
