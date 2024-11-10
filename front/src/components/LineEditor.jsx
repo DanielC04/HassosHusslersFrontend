@@ -8,13 +8,14 @@ import BeatLoader from 'react-spinners/BeatLoader'
 const WIDTH = 1400
 const HEIGHT = 700
 
-export default function LineEditor({ walls, setWalls, planSvg, isAutomated }) {
+export default function LineEditor({ walls, setWalls, imageBase64, isAutomated }) {
     // const [walls, setWalls] = useState([])
     const [isDragging, setIsDragging] = useState(false)
     const [selectedKey, setSelectedKey] = useState()
     const [hasLoaded, setHasLoaded] = useState(false)
     const [zoom, setZoom] = useState(1.0)
     const [debugPoint, setDebugPoint] = useState()
+    const [imageData, setImageData] = useState("")
     const imgRef = useRef()
     const wrapperRef = useRef()
 
@@ -112,19 +113,21 @@ export default function LineEditor({ walls, setWalls, planSvg, isAutomated }) {
         setZoom(newZoom)
     }
 
-    useEffect(() => {
-        renderSvgToImg(planSvg, imgRef.current)
-    }, [planSvg])
+    // useEffect(() => {
+    //     renderSvgToImg(planSvg, imgRef.current)
+    // }, [planSvg])
 
     useEffect(() => {
         if (!isAutomated) return;
         // make request to backend server to predict walls
-        const formData = new FormData();
-        formData.append('file', planSvg);
+        const imageJson = JSON.stringify({ image: imageBase64 });
 
         fetch('http://localhost:5000/predict_walls', {
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: imageJson
         })
         .then(response => response.json())
         .then(data => {
@@ -133,6 +136,9 @@ export default function LineEditor({ walls, setWalls, planSvg, isAutomated }) {
             if (!data || !data.walls) {
                 throw new Error('Invalid response from server');
             }
+
+            setImageData(data.image)
+
             // const scaleFactor = imgRef.current.width / 1000
             const scaleFactor = 0.95
             const offset = [90, -7]
@@ -148,6 +154,8 @@ export default function LineEditor({ walls, setWalls, planSvg, isAutomated }) {
         });
 
     }, [])
+
+    console.log("imageData: ", imageData)
 
     return (
         <div 
@@ -168,7 +176,8 @@ export default function LineEditor({ walls, setWalls, planSvg, isAutomated }) {
                 <EditorCanvas w={WIDTH} h={HEIGHT} walls={walls} selectedKey={selectedKey} debugPoint={debugPoint}/>
                 <img 
                     className={`absolute max-h-full max-w-full top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] ${hasLoaded ? 'visible' : 'invisible'} pointer-events-none`} 
-                    ref={imgRef} 
+                    ref={imgRef}
+                    src={imageBase64}
                     onLoad={()=>setHasLoaded(true)}
                 />
                 { selectedWall() &&

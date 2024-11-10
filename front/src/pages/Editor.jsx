@@ -3,6 +3,7 @@ import LineEditor from '../components/LineEditor';
 import LeTriangle from '../assets/triangle.svg';
 import uploadLogo from '../assets/upload.svg';
 import Floor from '../Floor';
+import { svgToPng } from './utils';
 
 function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtnHavingness }) {
     /*bg-slate-400 hover:bg-slate-500
@@ -129,7 +130,7 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
         setFloors(newFloors);
     }
     
-    function handleFileChange(e) {
+    async function handleFileChange(e) {
         if (e.target.files) {
             let receivedFile = e.target.files[0];
 
@@ -154,7 +155,9 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
                 }
             }
             if (index === null) {
-                uploadedFiles.current.push(receivedFile);
+                const base64Encoding = await svgToPng(receivedFile);
+                console.log("got the image: ", base64Encoding)
+                uploadedFiles.current.push(base64Encoding);
                 index = uploadedFiles.current.length - 1;
             }
 
@@ -306,7 +309,7 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
                         <div className="flex flex-row justify-center items-center">
                             
                         </div>
-                        <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]} isAutomated={automationToggle} className="my-auto" />
+                        <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} imageBase64={uploadedFiles.current[uploadDict.current[selectedFloor]]} className="my-auto" isAutomated={automationToggle} />
                     </div>
                 </div>
             }
