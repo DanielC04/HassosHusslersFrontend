@@ -72,6 +72,7 @@ export default function ModelViewer(props) {
 
     return (
         <div className={`w-full h-screen ${shouldHide ? 'hidden': ''}`}>
+            <button onClick={() => props.setPage('editor')} className="bg-green-800 text-black py-2 px-4 rounded mx-4 font-semibold absolute top-2 right-2 border-b-2 z-10">Back</button>
             {/* { settings_component } */}
             <div className='h-fit'>
                 <Leva
