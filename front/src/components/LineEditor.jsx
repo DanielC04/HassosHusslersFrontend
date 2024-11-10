@@ -151,7 +151,7 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
     return (
         <div 
             className="flex relative overflow-clip"
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: WIDTH, height: HEIGHT }}
             onWheel={handleScroll}
         >
             { !hasLoaded &&
@@ -159,12 +159,12 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
             }
             <div 
                 ref={wrapperRef} 
-                style={{ width: "100%", height: "100%", transform: `scale(${zoom})`}} 
+                style={{ width: WIDTH, height: HEIGHT, transform: `scale(${zoom})`}} 
                 onMouseDown={handleMouseDown} 
                 onMouseUp={handleMouseUp} 
                 onMouseMove={handleMouseMove}
             >
-                <EditorCanvas w="100%" h="100%" walls={walls} selectedKey={selectedKey} debugPoint={debugPoint}/>
+                <EditorCanvas w={WIDTH} h={HEIGHT} walls={walls} selectedKey={selectedKey} debugPoint={debugPoint}/>
                 <img 
                     className={`absolute max-h-full max-w-full top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] ${hasLoaded ? 'visible' : 'invisible'} pointer-events-none`} 
                     ref={imgRef} 
