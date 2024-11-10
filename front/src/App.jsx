@@ -37,9 +37,9 @@ function App() {
   if (page == 'editor') {
     return <>
       <Editor setPage={setPage} floors={floors} setFloors={setFloors}/>
-      <button onClick={()=>setFloors(
+      {/* <button onClick={()=>setFloors(
         {"-1": sampleFloor(), "0": sampleFloor(), "1":sampleFloor()}
-      )}>load</button>
+      )}>load</button> */}
     </>
   } else {
     return <ModelViewer setPage={setPage} floors={floors} />

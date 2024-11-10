@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
-import { Canvas  } from '@react-three/fiber'
-import { OrbitControls, MapControls, Environment } from '@react-three/drei'
-import { Ground } from './components/Ground'
-import WallStrip from './components/WallStrip'
+import React, { useEffect, useState } from 'react'
+import { Canvas, useThree  } from '@react-three/fiber'
 import Elevator from './components/Elevator'
-import FloorElement from './components/Floor'
+import FloorElement from './Scene/Floor'
 import Shaft from './components/Shaft'
-import { DraggableInstance } from './components/DraggableInstance'
-import Wall from './components/Wall'
-
+import { DraggableInstance } from './Scene/DraggableInstance'
+import Floor from '../../Floor'
+import CameraControls from './Scene/CameraControls'
+import { Grid, Sky } from '@react-three/drei'
 
 const WORLD_SIZE = 40
 
@@ -28,14 +26,36 @@ export default function ModelViewer(props) {
         z += floor.height;
     }
 
+    useEffect(() => {
+        // make sure building always is centered in 3D view
+        const groundFloor = props.floors[0];
+        let totalX = 0;
+        let totalY = 0;
+        for (let wall of groundFloor.walls) {
+            totalX += wall.start[0] + wall.end[0]
+            totalY += wall.start[1] + wall.end[1]
+        }
+        const average_x = totalX / 2 / groundFloor.walls.length;
+        const average_y = totalY / 2 / groundFloor.walls.length;
+        Floor.offset = [average_x, average_y]
+    }, [])
+
+
 
     return (
         <div className='w-full h-screen'>
             <Canvas>
                 <ambientLight intensity={Math.PI / 2} />
-                <spotLight position={[WORLD_SIZE/2, WORLD_SIZE/2, WORLD_SIZE/2]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
+                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                 <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-
+                <Sky distance={450000} sunPosition={[0, 1, 0]} {...props}
+                    // turbidity={10}
+					// rayleigh={2}
+					// mieCoefficient={0.005}
+					// mieDirectionalG={0.8}
+					// inclination={0.49}
+					// azimuth={0.25}
+                />
                 {
                     renderedFloors
                 }
@@ -47,29 +67,18 @@ export default function ModelViewer(props) {
                 <DraggableInstance setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
                     <Shaft setCameraActive={setCameraControlActive}></Shaft>
                 </DraggableInstance>
-                <gridHelper />
+                {/* <gridHelper args={[1000, 100]} color={'red'} /> */}
+                <Grid 
+                    infiniteGrid={true}
+                    cellSize={2}
+                    sectionSize={20}
+                    fadeDistance={400}
+                    fadeStrength={5}
+                    sectionColor={'#003049'}
+                />
                 
-                <Environment preset='park' background backgroundBlurriness={0.52} />
-
-                <MapControls
-                    enabled={isCameraControlActive}
-                    position0={[10, 10, 10]}
-                    zoom0={0.10}
-                 />
-                {/* <OrbitControls
-                    enableDamping={true}
-                    dampingFactor={0.05}
-                    enableZoom={true}
-                    zoomSpeed={1.0}
-                    autoRotate={false}
-                    autoRotateSpeed={2.0}
-                    // maxPolarAngle={Math.PI / 2}
-                    minAzimuthAngle={-Math.PI / 4}    // Limits left horizontal rotation to -45 degrees
-                    maxAzimuthAngle={Math.PI / 4}     // Limits right horizontal rotation to 45 degrees
-                    minDistance={2}
-                    maxDistance={50}
-                    enabled={isCameraControlActive}/> */}
-                {/* <Ground width={WORLD_SIZE} height={WORLD_SIZE}></Ground> */}
+                {/* <Environment preset='park' background backgroundBlurriness={0.52} /> */}
+                <CameraControls isCameraControlActive={isCameraControlActive}/>
             </Canvas>
             <div className='top-0 left-0 m-2 absolute cursor-pointer' onClick={() => props.setPage("editor")}>Back</div>
         </div>
