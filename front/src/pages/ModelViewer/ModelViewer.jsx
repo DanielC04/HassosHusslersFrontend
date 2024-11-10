@@ -10,11 +10,12 @@ import { Grid, Sky } from '@react-three/drei'
 // import Settings from './components/Settings'
 import { button, Leva, useControls } from 'leva'
 
-const WORLD_SIZE = 40
+const WORLD_SIZE = 250
 
 export default function ModelViewer(props) {
     const [isCameraControlActive, setCameraControlActive] = useState(true);
     const [elevator, setElevator] = useState([])
+    const [shafts, setShafts] = useState([])
     console.log(isCameraControlActive)
     console.log('viewer', props.floors[0])
 
@@ -49,20 +50,20 @@ export default function ModelViewer(props) {
         const newElevator = <DraggableInstance key={elevator.length + 1} setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
                 <Elevator setCameraActive={setCameraControlActive}></Elevator>
             </DraggableInstance>;
-        console.log(newElevator)
-        console.log("new list: ", [...elevator, newElevator])
-
-        setElevator([...elevator, newElevator]);
+        setElevator((prev) => [...prev, newElevator]);
+    }
+    const spawnShaft = () => {
+        const newShaft = <DraggableInstance key={elevator.length + 1} setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
+                <Shaft setCameraActive={setCameraControlActive}></Shaft>
+            </DraggableInstance>;
+        setElevator((prev) => [...prev, newShaft]);
     }
 
 
     const { addElevator } = useControls({
-        addElevator: button(spawnElevator),
+       addElevator: button(spawnElevator),
+       addShaft: button(spawnShaft)
     });
-    console.log(elevator)
-
-
-
 
     let shouldHide = props?.hidden
     // if there's no ground floor: don't render
@@ -83,8 +84,8 @@ export default function ModelViewer(props) {
                 <ambientLight intensity={Math.PI / 2} />
                 {/* <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} /> */}
                 <pointLight position={[-10, 50, -10]} decay={0} intensity={Math.PI} />
-                <pointLight position={[10, 50, -10]} decay={0} intensity={Math.PI} />
-                <pointLight position={[10, 50, 10]} decay={0} intensity={Math.PI} />
+                <pointLight position={[10, 50, -40]} decay={0} intensity={Math.PI} />
+                <pointLight position={[10, 50, 40]} decay={0} intensity={Math.PI} />
                 <pointLight position={[-10, 50, -10]} decay={0} intensity={Math.PI} />
                 <Sky distance={450000} sunPosition={[0, 1, 0]} {...props}
                     // turbidity={10}
@@ -101,11 +102,6 @@ export default function ModelViewer(props) {
                     elevator
                 }
 
-
-
-                <DraggableInstance setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
-                    <Shaft setCameraActive={setCameraControlActive}></Shaft>
-                </DraggableInstance>
                 {/* <gridHelper args={[1000, 100]} color={'red'} /> */}
                 <Grid 
                     infiniteGrid={true}

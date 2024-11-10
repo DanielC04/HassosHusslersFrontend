@@ -25,8 +25,8 @@ export default function Wall(props) {
             <boxGeometry args={dimensions} />
             {
                 gui.transparent ?
-                <meshLambertMaterial color={'#55585b'} opacity={0.6} transparent />:
-                <meshPhongMaterial color="#44484b" opacity={1} />
+                <meshLambertMaterial color={'#f8f7ff'} opacity={0.6} transparent />:
+                <meshPhongMaterial color="#f8f7ff" opacity={1} />
             }
         </mesh>
     )
