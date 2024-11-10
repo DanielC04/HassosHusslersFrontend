@@ -34,7 +34,7 @@ function UploadConglomerate({ handleFileChange }) {
         <img src={uploadLogo} className="fill-current w-5 h-5 mb-2" />
         <span className=' text-[#121212]'>Upload a floor plan here</span>
         <span className=' text-[#b7b9bd]'>SVG format, up to 100 MB</span>
-        <label htmlFor="floorplanupload" className="text-[#121212] mt-5  py-2 px-4 rounded items-center border border-[#121212]/[.40]">Browse File</label>
+        <label htmlFor="floorplanupload" className="text-[#121212] hover:bg-slate-100 mt-5  py-2 px-4 rounded items-center border border-[#121212]/[.40]">Browse File</label>
         <input id="floorplanupload" type="file" accept="image/svg+xml" onChange={handleFileChange}/>
     </div>;
 }
@@ -159,8 +159,8 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
         }
     }
 
-    function handleFloorPress(value, skipWarning=false) {
-        if (value == selectedFloor) {
+    function handleFloorPress(value, skipWarning=false, forceDelete=false) {
+        if (value == selectedFloor || forceDelete) {
             if (!hasFloorbtn) {
                 setHasFloorbtn(true);
                 return;
@@ -249,7 +249,39 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
 
     function changeToViewer() {
         function changeWindow() {
-
+            let floor = floorArray[floorArray.length - 1];
+            if (uploadDict.current[0] === null) {
+                let index;
+                for (let i = -1; i >= floorArray[floorArray.length - 1]; i--) {
+                    if (uploadDict.current[i] !== null) {
+                        index = i;
+                        break;
+                    }
+                }
+                for (let i = 1; i <= floorArray[0]; i++) {
+                    if (uploadDict.current[i] !== null) {
+                        index = i;
+                        break;
+                    }
+                }
+                heightDict[0] = heightDict[index];
+                heightDict[index] = "3";
+                let newFloors = {...floors};
+                newFloors[0] = newFloors[index];
+                newFloors[0].height = heightDict[0];
+                delete newFloors[index];
+                setFloors(newFloors);
+                uploadDict.current[0] = uploadDict.current[index];
+                delete uploadDict.current[index];
+            }
+            while (floor < floorArray[0]) {
+                if (uploadDict.current[floor] === null) {
+                    handleFloorPress(floor, true, true);
+                } else {
+                    floor++;
+                }
+            }
+            console.log('here', floorArray, uploadDict)
             setPage('viewer');
         }
 
