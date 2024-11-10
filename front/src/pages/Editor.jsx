@@ -102,7 +102,7 @@ function HeightInput({ height, setHeight }) {
         </div>;
 }
 
-export default function Editor({ setPage, floors, setFloors }) {
+export default function Editor({ setPage, floors, setFloors, hidden }) {
     const uploadedFiles = useRef([]);
     const uploadDict = useRef({0: null});
     const heightDict = useRef({0: "3"});
@@ -280,7 +280,7 @@ export default function Editor({ setPage, floors, setFloors }) {
         <a className="absolute top-0 left-0 z-40">
             <img src={monoplanLogo} className="h-24 z-40"/>
         </a>
-        <div className="flex">
+        <div className={`flex ${hidden ? 'hidden': ''}`}>
             <div className="flex h-screen bg-white z-30">
                 <div className="my-auto">
                     <FloorAddButton upsideDown={false} key="up" handleBtnPress={addFloorAbove}/>
@@ -302,7 +302,6 @@ export default function Editor({ setPage, floors, setFloors }) {
                             
                         </div>
                         <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} planSvg={uploadedFiles.current[uploadDict.current[selectedFloor]]} className="my-auto" />
-
                     </div>
                 </div>
             }

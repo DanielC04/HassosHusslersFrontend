@@ -1,7 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Editor from './pages/Editor'
 import ModelViewer from './pages/ModelViewer/ModelViewer'
 import Wall from './Wall'
+import Floor from './Floor'
+import {sample} from './assets/house-1-floor-2'
+
+function sampleFloor() {
+  const out = new Floor()
+  for (const key in sample[0]['walls']) {
+    const w = sample[0]['walls'][key]
+    out.walls.push(new Wall(w.start, w.end, w.key))
+  }
+  return out
+}
 
 function App() {
   const [page, setPage] = useState('editor')
@@ -23,11 +34,10 @@ function App() {
 
   const [floors, setFloors] = useState({0: null})
 
-  if (page == 'editor') {
-    return <Editor setPage={setPage} floors={floors} setFloors={setFloors}/>
-  } else {
-    return <ModelViewer setPage={setPage} floors={floors} />
-  }
+  return <>
+    <Editor hidden={page !== 'editor'} setPage={setPage} floors={floors} setFloors={setFloors}/>
+    <ModelViewer hidden={page !== 'viewer'} setPage={setPage} floors={floors} />
+  </>
 }
 
 export default App
