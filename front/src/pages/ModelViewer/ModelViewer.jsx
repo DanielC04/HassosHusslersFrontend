@@ -30,8 +30,7 @@ export default function ModelViewer(props) {
 
         const newRenderedFloors = []
         let z = -distanceBelowGround;
-        console.log(z)
-        for (const floorIndex of Object.keys(props.floors).sort()){
+        for (const floorIndex of Object.keys(props.floors).sort((a, b) => parseInt(a) - parseInt(b))){
             const floor = props.floors[floorIndex];
             if (!floor) continue;
             newRenderedFloors.push(<FloorElement key={floorIndex} floor={floor} z={z}/>)
