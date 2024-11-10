@@ -121,7 +121,7 @@ export default function LineEditor({ walls, setWalls, planSvg }) {
         const formData = new FormData();
         formData.append('file', planSvg);
 
-        fetch('http://localhost:5000/predict_walls', {
+        fetch('https://jan-berndt.de/monoplan/back/predict_walls', {
             method: 'POST',
             body: formData,
         })
