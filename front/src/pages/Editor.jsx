@@ -269,10 +269,10 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
                 let newFloors = {...floors};
                 newFloors[0] = newFloors[index];
                 newFloors[0].height = heightDict[0];
-                delete newFloors[index];
+                newFloors[index] = null;
                 setFloors(newFloors);
                 uploadDict.current[0] = uploadDict.current[index];
-                delete uploadDict.current[index];
+                uploadDict.current[index] = null;
             }
             while (floor < floorArray[0]) {
                 if (uploadDict.current[floor] === null) {
