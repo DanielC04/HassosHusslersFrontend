@@ -4,6 +4,7 @@ import ModelViewer from './pages/ModelViewer/ModelViewer'
 import Wall from './Wall'
 import Floor from './Floor'
 import {sample} from './assets/house-1-floor-2'
+import monoplanLogo from './assets/monoplanlogo.png';
 
 function sampleFloor() {
   const out = new Floor()
@@ -35,6 +36,9 @@ function App() {
   const [floors, setFloors] = useState({0: null})
 
   return <>
+    <a className="absolute top-0 left-0 z-40">
+        <img src={monoplanLogo} className="h-24 z-40"/>
+    </a>
     <Editor hidden={page !== 'editor'} setPage={setPage} floors={floors} setFloors={setFloors}/>
     <ModelViewer hidden={page !== 'viewer'} setPage={setPage} floors={floors} />
   </>

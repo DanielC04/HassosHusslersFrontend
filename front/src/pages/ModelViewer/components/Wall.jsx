@@ -1,3 +1,4 @@
+import { useControls } from 'leva';
 import React, { useEffect, useRef } from 'react'
 
 export default function Wall(props) {
@@ -11,6 +12,9 @@ export default function Wall(props) {
     useEffect(() => {
         if (ref.current) ref.current.rotateY(rotationAngle)
     }, [])
+    const gui = useControls({
+        transparent: true
+    }, { })
 
     return (
         <mesh
@@ -19,8 +23,11 @@ export default function Wall(props) {
             position={position}
         >
             <boxGeometry args={dimensions} />
-            <meshPhongMaterial color="#44484b" opacity={1} />
-            {/* <meshBasicMaterial color="#44484b" /> */}
+            {
+                gui.transparent ?
+                <meshLambertMaterial color={'#55585b'} opacity={0.6} transparent />:
+                <meshPhongMaterial color="#44484b" opacity={1} />
+            }
         </mesh>
     )
 }

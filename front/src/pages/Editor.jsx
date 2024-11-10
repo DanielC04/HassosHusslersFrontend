@@ -2,7 +2,6 @@ import { useState, useRef } from 'react';
 import LineEditor from '../components/LineEditor';
 import LeTriangle from '../assets/triangle.svg';
 import uploadLogo from '../assets/upload.svg';
-import monoplanLogo from '../assets/monoplanlogo.png';
 import Floor from '../Floor';
 
 function FloorKnob({ value, handleBtnPress, isSelected, hasFloorbtn, setFloorbtnHavingness }) {

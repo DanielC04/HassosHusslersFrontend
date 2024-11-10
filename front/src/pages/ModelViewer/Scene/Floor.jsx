@@ -33,7 +33,7 @@ export default function FloorElement({ floor, width, z}) {
             {
                 z == 0 && hullGeometry &&
                 <mesh geometry={hullGeometry}>
-                    <meshBasicMaterial color={'grey'} />
+                    <meshLambertMaterial color={'eggshell'}  opacity={0.8} transparent />
                 </mesh>
             }
             { walls.map(wall => {

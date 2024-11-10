@@ -7,12 +7,14 @@ import { DraggableInstance } from './Scene/DraggableInstance'
 import Floor from '../../Floor'
 import CameraControls from './Scene/CameraControls'
 import { Grid, Sky } from '@react-three/drei'
-import Settings from './components/Settings'
+// import Settings from './components/Settings'
+import { button, Leva, useControls } from 'leva'
 
 const WORLD_SIZE = 40
 
 export default function ModelViewer(props) {
     const [isCameraControlActive, setCameraControlActive] = useState(true);
+    const [elevator, setElevator] = useState([])
     console.log(isCameraControlActive)
     console.log('viewer', props.floors[0])
 
@@ -43,19 +45,47 @@ export default function ModelViewer(props) {
         Floor.offset = [average_x, average_y]
     }, [props.floors])
 
+    const spawnElevator = () => {
+        const newElevator = <DraggableInstance key={elevator.length + 1} setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
+                <Elevator setCameraActive={setCameraControlActive}></Elevator>
+            </DraggableInstance>;
+        console.log(newElevator)
+        console.log("new list: ", [...elevator, newElevator])
+
+        setElevator([...elevator, newElevator]);
+    }
 
 
-    if (props?.hidden) return <></>
+    const { addElevator } = useControls({
+        addElevator: button(spawnElevator),
+    });
+    console.log(elevator)
+
+
+
+
+    let shouldHide = props?.hidden
     // if there's no ground floor: don't render
-    if (!props?.floors || !props.floors.hasOwnProperty(0)) return <div>The Ground floor can't be left empty!</div>
+    if (!props?.floors || !props.floors.hasOwnProperty(0)) shouldHide = true;
+
 
     return (
-        <div className='w-full h-screen'>
-            <Settings></Settings>
+        <div className={`w-full h-screen ${shouldHide ? 'hidden': ''}`}>
+            {/* { settings_component } */}
+            <div className='h-fit'>
+                <Leva
+                    className='fit-content'
+                    collapsed
+                    hidden={shouldHide}
+                ></Leva>
+            </div>
             <Canvas>
                 <ambientLight intensity={Math.PI / 2} />
-                <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-                <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
+                {/* <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} /> */}
+                <pointLight position={[-10, 50, -10]} decay={0} intensity={Math.PI} />
+                <pointLight position={[10, 50, -10]} decay={0} intensity={Math.PI} />
+                <pointLight position={[10, 50, 10]} decay={0} intensity={Math.PI} />
+                <pointLight position={[-10, 50, -10]} decay={0} intensity={Math.PI} />
                 <Sky distance={450000} sunPosition={[0, 1, 0]} {...props}
                     // turbidity={10}
 					// rayleigh={2}
@@ -67,10 +97,11 @@ export default function ModelViewer(props) {
                 {
                     renderedFloors
                 }
+                {
+                    elevator
+                }
 
-                <DraggableInstance setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
-                    <Elevator setCameraActive={setCameraControlActive}></Elevator>
-                </DraggableInstance>
+
 
                 <DraggableInstance setCameraActive={setCameraControlActive} worldSize={WORLD_SIZE} >
                     <Shaft setCameraActive={setCameraControlActive}></Shaft>
@@ -84,11 +115,9 @@ export default function ModelViewer(props) {
                     fadeStrength={5}
                     sectionColor={'#003049'}
                 />
-                
                 {/* <Environment preset='park' background backgroundBlurriness={0.52} /> */}
                 <CameraControls isCameraControlActive={isCameraControlActive}/>
             </Canvas>
-            <div className='top-2 right-2 m-2 absolute cursor-pointer' onClick={() => props.setPage("editor")}>Back</div>
         </div>
     )
 }
