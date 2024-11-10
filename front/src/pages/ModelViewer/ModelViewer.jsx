@@ -18,19 +18,27 @@ export default function ModelViewer(props) {
     const [isCameraControlActive, setCameraControlActive] = useState(true);
     const [elevator, setElevator] = useState([])
     const [shafts, setShafts] = useState([])
-    console.log(isCameraControlActive)
-    console.log('viewer', props.floors[0])
+    const [renderedFloors, setRenderedFloors] = useState([])
 
 
     // const renderedFloors = Object.keys(props.floors).map((floorIndex) => {
-    const renderedFloors = []
-    let z = 0;
-    for (const floorIndex of Object.keys(props.floors).sort()){
-        const floor = props.floors[floorIndex];
-        if (!floor) continue;
-        renderedFloors.push(<FloorElement key={floorIndex} floor={floor} z={z}/>)
-        z += floor.height;
-    }
+    useEffect(() => {
+        const levelsBelowGround = Object.keys(props.floors)
+            .filter(key => parseInt(key) < 0)
+            .map(key => props.floors[key]);
+        const distanceBelowGround = levelsBelowGround.reduce((accumulator, floor) => accumulator + floor.height, 0)
+
+        const newRenderedFloors = []
+        let z = -distanceBelowGround;
+        console.log(z)
+        for (const floorIndex of Object.keys(props.floors).sort()){
+            const floor = props.floors[floorIndex];
+            if (!floor) continue;
+            newRenderedFloors.push(<FloorElement key={floorIndex} floor={floor} z={z}/>)
+            z += floor.height;
+        }
+        setRenderedFloors(newRenderedFloors);
+    }, [props])
 
     useEffect(() => {
         // make sure building always is centered in 3D view
