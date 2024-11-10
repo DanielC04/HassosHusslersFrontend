@@ -276,9 +276,6 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
     return <>
         <Popup hidden={popupState[0]} text={popupState[1]} hideSelf={popupState[2]} continueCallback={popupState[3]}/>
 
-        <a className="absolute top-0 left-0 z-40">
-            <img src={monoplanLogo} className="h-24 z-40"/>
-        </a>
         <div className={`flex ${hidden ? 'hidden': ''}`}>
             <div className="flex h-screen bg-white z-30">
                 <div className="my-auto">
