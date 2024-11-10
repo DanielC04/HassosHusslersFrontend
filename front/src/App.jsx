@@ -34,16 +34,10 @@ function App() {
 
   const [floors, setFloors] = useState({0: null})
 
-  if (page == 'editor') {
-    return <>
-      <Editor setPage={setPage} floors={floors} setFloors={setFloors}/>
-      {/* <button onClick={()=>setFloors(
-        {"-1": sampleFloor(), "0": sampleFloor(), "1":sampleFloor()}
-      )}>load</button> */}
-    </>
-  } else {
-    return <ModelViewer setPage={setPage} floors={floors} />
-  }
+  return <>
+    <Editor hidden={page !== 'editor'} setPage={setPage} floors={floors} setFloors={setFloors}/>
+    <ModelViewer hidden={page !== 'viewer'} setPage={setPage} floors={floors} />
+  </>
 }
 
 export default App

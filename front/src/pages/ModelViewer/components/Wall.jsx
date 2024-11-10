@@ -19,7 +19,8 @@ export default function Wall(props) {
             position={position}
         >
             <boxGeometry args={dimensions} />
-            <meshPhongMaterial color="#44484b" opacity={0.3} transparent />
+            <meshPhongMaterial color="#44484b" opacity={1} />
+            {/* <meshBasicMaterial color="#44484b" /> */}
         </mesh>
     )
 }

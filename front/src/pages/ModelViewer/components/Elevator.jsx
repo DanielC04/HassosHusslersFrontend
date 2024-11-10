@@ -12,7 +12,7 @@ export default function Elevator(props) {
         rotation={[0, 0, 0]}
         scale={2}
       >
-            <meshBasicMaterial color={'darkblue'} wireframe={true} />
+            <meshBasicMaterial color={'#44484b'} wireframe={true} />
         </mesh>
   );
 }
