@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useRef, useState } from 'react'
 import { Canvas, useThree  } from '@react-three/fiber'
 import Elevator from './components/Elevator'
 import FloorElement from './Scene/Floor'
@@ -8,7 +8,7 @@ import Floor from '../../Floor'
 import CameraControls from './Scene/CameraControls'
 import { Grid, Sky } from '@react-three/drei'
 // import Settings from './components/Settings'
-import { button, Leva, useControls } from 'leva'
+import { button, folder, Leva, useControls } from 'leva'
 
 import backBtnImg from '../../assets/back.svg';
 
@@ -70,9 +70,11 @@ export default function ModelViewer(props) {
 
 
     const { addElevator } = useControls({
-       addElevator: button(spawnElevator),
-       addShaft: button(spawnShaft)
-    });
+        Objects: folder({
+            addElevator: button(spawnElevator),
+            addShaft: button(spawnShaft),
+        }, { collapsed: true})
+    } )
 
     let shouldHide = props?.hidden
     // if there's no ground floor: don't render
@@ -85,17 +87,11 @@ export default function ModelViewer(props) {
                 <img src={backBtnImg} className='fill-current w-4 h-4 mr-1 my-auto'/>
                 <span>Back</span>
             </button>
+
+            <Leva titleBar={{position: {x: 0, y: 100} }} hidden={shouldHide}></Leva>
             {/* { settings_component } */}
-            <div className='h-fit'>
-                <Leva
-                    className='fit-content'
-                    collapsed
-                    hidden={shouldHide}
-                ></Leva>
-            </div>
             <Canvas>
                 <ambientLight intensity={Math.PI / 2} />
-                {/* <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} /> */}
                 <pointLight position={[-10, 50, -10]} decay={0} intensity={Math.PI} />
                 <pointLight position={[10, 50, -40]} decay={0} intensity={Math.PI} />
                 <pointLight position={[10, 50, 40]} decay={0} intensity={Math.PI} />
