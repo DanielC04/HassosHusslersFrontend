@@ -10,6 +10,8 @@ import { Grid, Sky } from '@react-three/drei'
 // import Settings from './components/Settings'
 import { button, Leva, useControls } from 'leva'
 
+import backBtnImg from '../../assets/back.svg';
+
 const WORLD_SIZE = 250
 
 export default function ModelViewer(props) {
@@ -72,7 +74,10 @@ export default function ModelViewer(props) {
 
     return (
         <div className={`w-full h-screen ${shouldHide ? 'hidden': ''}`}>
-            <button onClick={() => props.setPage('editor')} className="bg-green-800 text-black py-2 px-4 rounded mx-4 font-semibold absolute top-2 right-2 border-b-2 z-10">Back</button>
+            <button onClick={() => props.setPage('editor')} className="bg-slate-100 hover:bg-slate-200 text-black py-2 pr-4 pl-2 rounded inline-flex mr-4 ml-2 font-semibold absolute top-6 right-4 border border-[#121212]/[.40] z-10">
+                <img src={backBtnImg} className='fill-current w-4 h-4 mr-1 my-auto'/>
+                <span>Back</span>
+            </button>
             {/* { settings_component } */}
             <div className='h-fit'>
                 <Leva
