@@ -245,10 +245,10 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
     }
 
     function deleteCurrentFloorplan() {
-        uploadedFiles.current[uploadDict.current[selectedFloor]] = null;
-        uploadDict.current[selectedFloor] = null;
+        uploadedFiles.current[uploadDict.current[selectedFloor]] = "";
+        uploadDict.current[selectedFloor] = "";
         heightDict.current[selectedFloor] = "3";
-        setWallsInFloor(selectedFloor, null);
+        setWallsInFloor(selectedFloor, []);
     }
         
     function setWallsInFloor(floor, walls) {
@@ -307,7 +307,6 @@ export default function Editor({ setPage, floors, setFloors, hidden }) {
                     </div>
                     <div className="flex flex-col justify-center h-full items-center">
                         <div className="flex flex-row justify-center items-center">
-                            
                         </div>
                         <LineEditor walls={floors[selectedFloor].walls} setWalls={(w) => setWallsInFloor(selectedFloor, w)} imageBase64={uploadedFiles.current[uploadDict.current[selectedFloor]]} className="my-auto" isAutomated={automationToggle} />
                     </div>
