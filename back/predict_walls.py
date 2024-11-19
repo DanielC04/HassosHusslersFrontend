@@ -107,6 +107,24 @@ def predict_walls(filepath: str, show_result=False):
         # displaying image
         axarr.imshow(original_image)
         plt.show()
+    
+    off_x = width/8.8
+    off_y = height/7.5
+    fac_x = 1.05
+    fac_y = 1.05
+    
+    for wall in walls:
+        wall[0][0] += off_x
+        wall[0][1] += off_y
+        wall[1][0] += off_x
+        wall[1][1] += off_y
+        wall[0][0] *= fac_x
+        wall[0][1] *= fac_y
+        wall[1][0] *= fac_x
+        wall[1][1] *= fac_y
+
+# insaner sinnvoller elegeanter Fix
+# it just works
 
     return walls
 
