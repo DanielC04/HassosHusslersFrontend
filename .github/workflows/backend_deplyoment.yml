@@ -40,7 +40,7 @@ jobs:
           name: python-app
           path: |
             release.zip
-            !venv/
+            !.python_packages/
 
   deploy:
     runs-on: ubuntu-latest
