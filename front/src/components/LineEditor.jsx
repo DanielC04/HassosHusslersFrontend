@@ -122,7 +122,7 @@ export default function LineEditor({ walls, setWalls, imageBase64, isAutomated }
         // make request to backend server to predict walls
         const imageJson = JSON.stringify({ image: imageBase64 });
 
-        fetch('http://localhost:7071/api/predict_walls', {
+        fetch(`${process.env.VITE_BACKEND_URL}/predict_walls`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -38,12 +38,12 @@ function UploadConglomerate({ handleFileChange, setAutomationToggle, isAutomated
         <span className=' text-[#b7b9bd]'>SVG format, up to 100 MB</span>
         <label htmlFor="floorplanupload" className="text-[#121212] hover:bg-slate-100 mt-5  py-2 px-4 rounded items-center border border-[#121212]/[.40]">Browse File</label>
         <input id="floorplanupload" type="file" accept="image/svg+xml" onChange={handleFileChange}/>
-    </div><label class="inline-flex items-center cursor-pointer mt-6">
-            {isAutomated ? <input type="checkbox" checked onChange={(event) => {setAutomationToggle(event.currentTarget.checked)}} class="sr-only peer"/>
-            : <input type="checkbox" onChange={(event) => {setAutomationToggle(event.currentTarget.checked)}} class="sr-only peer"/>
+    </div><label className="inline-flex items-center cursor-pointer mt-6">
+            {isAutomated ? <input type="checkbox" checked onChange={(event) => {setAutomationToggle(event.currentTarget.checked)}} className="sr-only peer"/>
+            : <input type="checkbox" onChange={(event) => {setAutomationToggle(event.currentTarget.checked)}} className="sr-only peer"/>
             }
-            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-slate-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-            <span class="ms-3 text-sm font-medium text-[#121212]">Automated Wall Extraction</span>
+            <div className="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-slate-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            <span className="ms-3 text-sm font-medium text-[#121212]">Automated Wall Extraction</span>
         </label></div>;
 }
 
