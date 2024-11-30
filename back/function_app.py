@@ -1,12 +1,11 @@
 import azure.functions as func
 import json
 import logging
-from cairosvg import svg2png
+# from cairosvg import svg2png
 import base64
 from predict_walls import predict_walls
-import os
-import numpy as np
-import cv2
+# import numpy as np
+# import cv2
 
 app = func.FunctionApp()
 

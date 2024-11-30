@@ -1,7 +1,5 @@
 import cv2
-from time import sleep
 import matplotlib.pyplot as plt
-from math import tan
 
 
 # Beispiel 1
