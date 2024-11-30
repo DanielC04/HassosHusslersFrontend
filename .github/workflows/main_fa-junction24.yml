@@ -31,6 +31,9 @@ jobs:
           python -m venv venv
           source venv/bin/activate
 
+      - name: enter correct directory
+        run: cd back
+
       - name: Debug info
         run: pwd && ls -la
 
