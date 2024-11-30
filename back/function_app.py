@@ -7,7 +7,7 @@ from predict_walls import predict_walls
 # import numpy as np
 # import cv2
 
-app = func.FunctionApp(auth_level=func.AuthLevel.ANONYMOUS)
+app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 
 @app.function_name(name="HelloWorld")
