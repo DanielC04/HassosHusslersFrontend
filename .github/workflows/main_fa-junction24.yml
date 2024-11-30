@@ -27,7 +27,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       
       - name: enter correct directory
-      - run: cd back/
+        run: cd back/
 
       - name: Create and start virtual environment
         run: |
