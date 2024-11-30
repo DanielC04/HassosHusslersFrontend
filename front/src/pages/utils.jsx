@@ -3,7 +3,7 @@ export const svgToPng = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
 
-        const result = await fetch('http://localhost:5000/svgToPng', {
+        const result = await fetch(`${process.env.REACT_BACKEND_URL}/svgToPng`, {
             method: 'POST',
             body: formData,
         });
