@@ -1,5 +1,4 @@
 import cv2
-import os
 from time import sleep
 import matplotlib.pyplot as plt
 from math import tan
@@ -12,9 +11,7 @@ EXTENSION_STEP_SIZE = 2
 WINDOW_SIZE = 4
 MIN_LENGTH = 40
 
-def predict_walls(filepath: str, show_result=False):
-    image = cv2.imread(filepath)
-
+def predict_walls(image, show_result=False):
     _, image = cv2.threshold(image, 127, 255, cv2.THRESH_TOZERO) 
     original_image = image.copy()
     image_box_cutout = image.copy()
@@ -108,20 +105,20 @@ def predict_walls(filepath: str, show_result=False):
         axarr.imshow(original_image)
         plt.show()
     
-    off_x = width/8.8
-    off_y = height/7.5
-    fac_x = 1.05
-    fac_y = 1.05
+    # off_x = width/8.8
+    # off_y = height/7.5
+    # fac_x = 1.05
+    # fac_y = 1.05
     
-    for wall in walls:
-        wall[0][0] += off_x
-        wall[0][1] += off_y
-        wall[1][0] += off_x
-        wall[1][1] += off_y
-        wall[0][0] *= fac_x
-        wall[0][1] *= fac_y
-        wall[1][0] *= fac_x
-        wall[1][1] *= fac_y
+    # for wall in walls:
+    #     wall[0][0] += off_x
+    #     wall[0][1] += off_y
+    #     wall[1][0] += off_x
+    #     wall[1][1] += off_y
+    #     wall[0][0] *= fac_x
+    #     wall[0][1] *= fac_y
+    #     wall[1][0] *= fac_x
+    #     wall[1][1] *= fac_y
 
 # insaner sinnvoller elegeanter Fix
 # it just works
