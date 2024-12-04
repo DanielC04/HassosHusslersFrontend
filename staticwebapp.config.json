@@ -1,0 +1,11 @@
+{
+  "routes": [
+    {
+      "route": "/svgToPng",
+      "methods": [
+        "post"
+      ],
+      "statusCode": 301
+    }
+  ]
+}
