@@ -45,7 +45,7 @@ jobs:
       - name: Deploy Function App
         working-directory: ./back
         run: |
-          func azure functionapp publish fa-junction24
+          func azure functionapp publish fa-junction24 --python
 
       # Optional: Cleanup
       - name: Clean up Python cache
