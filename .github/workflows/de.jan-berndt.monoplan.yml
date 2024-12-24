@@ -1,31 +1,37 @@
-on: push
-  branches:
-    - main
-name: Deploy site to monoplan.jan-berndt.de on push
-jobs:
-  web-deploy:
-    name: Deploy static page
-    runs-on: ubuntu-latest
-    steps:
-    - name: Get latest code
-      uses: actions/checkout@v4
+name: Deploy frontend + backend
 
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-      
-    - name: Build Project
-      working-directory: ./front
-      run: |
-        npm install
-        npm run build
-    
-    - name: Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: ftp.samkirkland.com
-        username: web111
-        password: ${{ secrets.password }}
-        local-dir: ./front/dist/
-        server-dir: htdocs/monoplan/
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-front:
+    runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v4
+  
+      - name: Use Node.js 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+        
+      - name: Build Project
+        working-directory: ./front
+        run: |
+          npm install
+          npm run build
+
+      # https://github.com/marketplace/actions/ftp-deploy
+      - name: Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: cc1.ccnode.org
+          username: web111_monoplan
+          password: ${{ secrets.JAN_BERNDT_WEBSPACE }}
+          local-dir: ./front/dist/
+          protocol: ftps
+          server-dir: /www/
