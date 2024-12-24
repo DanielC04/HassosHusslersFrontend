@@ -11,6 +11,10 @@ import sys
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/health')
+def health():
+    return 'OK'
+
 @app.route('/svgToPng', methods=['POST'])
 def svgToPng():
     # Check if a file was provided
