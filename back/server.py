@@ -111,6 +111,3 @@ def predict_walls_path():
             os.remove(filepath)
         except:
             pass
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
