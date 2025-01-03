@@ -1,6 +1,6 @@
 # Team Hassos Hustlers yo
 
-gunicorn --chdir back -w 2 -b 0.0.0.0:4254 server:app
+python -m gunicorn --chdir back -w 2 -b 0.0.0.0:4254 server:app
 
 backend install
 
