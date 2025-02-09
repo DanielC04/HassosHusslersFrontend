@@ -35,6 +35,15 @@ function App() {
 // })
 
   const [floors, setFloors] = useState({0: null})
+  useEffect(async () => {
+    const url = `${process.env.VITE_BACKEND_URL}/health`
+    const res = await fetch(url)
+    if (res.ok) {
+      console.log(`${url} reached!`)
+    } else {
+      console.error(`${url} not reached!`)
+    }
+  }, [])
 
   return <>
     <a className="absolute top-0 left-0 z-40">
