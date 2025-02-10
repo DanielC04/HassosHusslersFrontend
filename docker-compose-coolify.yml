@@ -1,0 +1,16 @@
+services:
+  back:
+    image: jafber/monoplan-back
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    restart: always
+
+  front:
+    image: jafber/monoplan-front
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - back
