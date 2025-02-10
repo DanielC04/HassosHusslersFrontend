@@ -9,7 +9,8 @@ EXTENSION_STEP_SIZE = 2
 WINDOW_SIZE = 4
 MIN_LENGTH = 40
 
-def predict_walls(image, show_result=False):
+def predict_walls(image_path, show_result=True):
+    image = cv2.imread(image_path)
     _, image = cv2.threshold(image, 127, 255, cv2.THRESH_TOZERO) 
     original_image = image.copy()
     image_box_cutout = image.copy()

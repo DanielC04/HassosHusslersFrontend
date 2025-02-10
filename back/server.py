@@ -56,7 +56,7 @@ def svgToPng():
 
 @app.route('/predict_walls', methods=['POST'])
 def predict_walls_path():
-    try:
+    # try:
         data = request.get_json()
         print(data, file=sys.stdout)
         
@@ -97,17 +97,17 @@ def predict_walls_path():
         })
         response.headers.add("Access-Control-Allow-Origin", "*")
         return response, 202
-    except Exception as e: 
-        print(e, file=sys.stdout)
-        response = jsonify({
-            "message": "Error processing SVG :/",
-            "walls": None,
-        })
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        return response, 500
-    finally:
-        # Clean up the saved file
-        try:
-            os.remove(filepath)
-        except:
-            pass
+    # except Exception as e: 
+    #     print(e, file=sys.stdout)
+    #     response = jsonify({
+    #         "message": "Error processing SVG :/",
+    #         "walls": None,
+    #     })
+    #     response.headers.add("Access-Control-Allow-Origin", "*")
+    #     return response, 500
+    # finally:
+    #     # Clean up the saved file
+    #     try:
+    #         os.remove(filepath)
+    #     except:
+    #         pass
